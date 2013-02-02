@@ -10,21 +10,79 @@ import java.util.regex.Pattern;
 public class Main {
     public static void main(String[] args) throws IOException {
         Alphabet alphabet = loadAlphabet(Main.class.getResourceAsStream("alphabet.txt"));
+        float hitMin = getFreq(alphabet.getFrequency());
+        float hitMax = 1.0F / alphabet.getFrequency().length;
+        float hitLine = (hitMax * hitMax + hitMin * hitMin) / 2.0F;
         try (InputStreamReader reader = new InputStreamReader(Main.class.getResourceAsStream("crypto.txt"), StandardCharsets.UTF_8)) {
             int[] crypto = loadCrypto(reader, alphabet);
             for (int i = 1; i <= 20; ++i) {
                 float hit = checkKeywordLength(crypto, alphabet, i);
-                System.out.println(i + ": " + hit);
+                if (hit > hitLine) {
+                    System.out.println(i + ": " + hit);
+                    getFreqKeyword(crypto, alphabet, i);
+                }
             }
-            System.out.println(crypto.length);
+        }
+    }
+
+    private static float getFreq(float[] frequency) {
+        float hit = 0;
+        for (float f : frequency) {
+            hit += f * f;
+        }
+        return hit;
+    }
+
+    private static float getFreq(int[] list) {
+        int count = 0;
+        float result = 0;
+        for (int i : list) {
+            result += i * (i - 1);
+            count += i;
+        }
+        return result / (count * (count - 1));
+    }
+
+    private static void getFreqKeyword(int[] crypto, Alphabet alphabet, int length) {
+        float[] freq = alphabet.getFrequency();
+        int[] counts = new int[length];
+        int[][] table = new int[length][];
+        for (int i = 0; i < length; ++i) {
+            table[i] = new int[freq.length];
+        }
+        for (int i = 0; i < crypto.length; ++i) {
+            table[i % length][crypto[i]]++;
+            counts[i % length]++;
+        }
+        int[] result = new int[length];
+        for (int i = 1; i < length; ++i) {
+            long[] freqShift = new long[freq.length];
+            for (int testShift = 0; testShift < freq.length; ++testShift) {
+                long testFreq = 0;
+                for (int j = 0; j < freq.length; j++) {
+                    testFreq += table[0][j] * table[i][(j + testShift) % freq.length];
+                }
+                freqShift[testShift] = testFreq;
+            }
+            int shift = 0;
+            for (int j = 0; j < freqShift.length; ++j) {
+                if (freqShift[shift] < freqShift[j]) {
+                    shift = j;
+                }
+            }
+            result[i] = shift;
+        }
+        result[2] -= 3;
+        for (int i = 0; i < freq.length; ++i) {
+            StringBuilder key = new StringBuilder();
+            for (int j = 0; j < length; ++j) {
+                key.append(alphabet.getAlphabet().charAt((freq.length - result[j] + i) % freq.length));
+            }
+            System.out.println(key.toString());
         }
     }
 
     private static float checkKeywordLength(int[] crypto, Alphabet alphabet, int length) {
-        float base = 0;
-        for (float freq : alphabet.getFrequency()) {
-            base += freq * freq;
-        }
         float result = 0;
         for (int i = 0; i < length; ++i) {
             float hit = 0;
@@ -37,7 +95,7 @@ public class Main {
             for (int freq : freqs) {
                 hit += (freq * (freq - 1)) / (float) (count * (count - 1));
             }
-            hit -= base;
+            //hit -= base;
             result += hit * hit;
         }
         return result / length;
