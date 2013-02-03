@@ -17,7 +17,6 @@ public class Vigenere {
                 strToIdx(alphabet, key),
                 strToIdx(alphabet, text)
         ));
-        //return idxToStr(crypt, strToIdx(alphabet, text));
     }
 
     public static String decrypt(String base, String crypt, String key, String data) {
@@ -39,16 +38,16 @@ public class Vigenere {
         return data;
     }
 
-    public static int[] decrypt(int[] crypt, int[] key, int[] text) {
-        int[] data = new int[text.length];
-        for (int i = 0; i < text.length; ++i) {
+    public static int[] decrypt(int[] crypt, int[] key, int[] data) {
+        int[] text = new int[data.length];
+        for (int i = 0; i < data.length; ++i) {
             int shift = key[i % key.length];
-            data[i] = crypt[(crypt.length + text[i] - shift) % crypt.length];
+            text[i] = crypt[(crypt.length + data[i] - shift) % crypt.length];
         }
-        return data;
+        return text;
     }
 
-    private static String idxToStr(String base, int[] encrypt) {
+    public static String idxToStr(String base, int[] encrypt) {
         StringBuilder builder = new StringBuilder();
         for (int i : encrypt) {
             builder.append(base.charAt(i));
@@ -56,7 +55,7 @@ public class Vigenere {
         return builder.toString();
     }
 
-    private static int[] strToIdx(Map<Character, Integer> alphabet, String str) {
+    public static int[] strToIdx(Map<Character, Integer> alphabet, String str) {
         int idx[] = new int[str.length()];
         int size = 0;
         for (char c : str.toCharArray()) {
@@ -69,7 +68,7 @@ public class Vigenere {
         return Arrays.copyOf(idx, size);
     }
 
-    private static Map<Character, Integer> checkAlphabet(String base, String crypt) {
+    public static Map<Character, Integer> createAlphabet(String base) {
         Map<Character, Integer> map = new HashMap<>();
         for (int i = 0; i < base.length(); ++i) {
             char c = base.charAt(i);
@@ -78,6 +77,11 @@ public class Vigenere {
             }
             map.put(c, i);
         }
+        return map;
+    }
+
+    private static Map<Character, Integer> checkAlphabet(String base, String crypt) {
+        Map<Character, Integer> map = createAlphabet(base);
         Map<Character, Integer> check = new HashMap<>(map);
         for (char c : crypt.toCharArray()) {
             if (check.remove(c) == null) {
