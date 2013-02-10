@@ -1,0 +1,39 @@
+<fop version="1.0">
+    <hyphenation-pattern lang="ru" country="RU">ru_RU</hyphenation-pattern>
+    <renderers>
+        <renderer mime="application/pdf">
+            <fonts>
+                <!-- register a particular font -->
+                <font kerning="yes" embed-url="fonts/FreeSerif.ttf">
+                    <font-triplet name="Serif" style="normal" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="fonts/FreeSerifItalic.ttf">
+                    <font-triplet name="Serif" style="italic" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="fonts/FreeSerifBold.ttf">
+                    <font-triplet name="Serif" style="normal" weight="bold"/>
+                </font>
+                <font kerning="yes" embed-url="fonts/FreeSerifBoldItalic.ttf">
+                    <font-triplet name="Serif" style="italic" weight="bold"/>
+                </font>
+                
+                <font kerning="yes"
+                 embed-url="fonts/FreeSerif.ttf">
+                    <font-triplet name="Times-Roman" style="normal" weight="normal"/>
+                </font>
+                <font kerning="yes"
+                 embed-url="fonts/FreeSerifBold.ttf">
+                    <font-triplet name="Times-Bold" style="normal" weight="bold"/>
+                </font>
+                <font kerning="yes"
+                 embed-url="fonts/FreeMonoBold.ttf">
+                    <font-triplet name="Helvetica-Bold" style="normal" weight="bold"/>
+                </font>
+                <font kerning="yes"
+                 embed-url="fonts/FreeMonoBoldOblique.ttf">
+                    <font-triplet name="Helvetica-BoldOblique" style="italic" weight="bold"/>
+                </font>
+            </fonts>
+        </renderer>
+    </renderers>
+</fop>
