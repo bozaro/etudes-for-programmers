@@ -13,27 +13,30 @@ import java.util.List;
 public class Alphabet {
     private final float[] frequency;
     private final String alphabet;
-    private final String sorted;
+    private final int[] sorted;
 
     public Alphabet(final float[] frequency, final String alphabet) {
         this.frequency = frequency;
         this.alphabet = alphabet;
 
-        List<Character> chars = new ArrayList<>(alphabet.length());
-        for (char c : alphabet.toCharArray()) {
-            chars.add(c);
+        List<Integer> remap = new ArrayList<>(alphabet.length());
+        for (int i = 0; i < alphabet.length(); ++i) {
+            remap.add(i);
         }
-        Collections.sort(chars, new Comparator<Character>() {
+        Collections.sort(remap, new Comparator<Integer>() {
             @Override
-            public int compare(Character a, Character b) {
-                return Float.compare(frequency[alphabet.indexOf(b)], frequency[alphabet.indexOf(a)]);
+            public int compare(Integer a, Integer b) {
+                return Float.compare(frequency[b], frequency[a]);
             }
         });
-        StringBuilder sortedBuilder = new StringBuilder();
-        for (Character c : chars) {
-            sortedBuilder.append(c);
+        StringBuilder x = new StringBuilder();
+        sorted = new int[alphabet.length()];
+        for (int i = 0; i < alphabet.length(); ++i) {
+            //sorted[remap.get(i)] = i;
+            sorted[i] = remap.get(i);
+            x.append(alphabet.charAt(remap.get(i)));
         }
-        sorted = sortedBuilder.toString();
+        System.out.println(x.toString());
     }
 
     public float[] getFrequency() {
@@ -44,7 +47,7 @@ public class Alphabet {
         return alphabet;
     }
 
-    public String getSorted() {
+    public int[] getSorted() {
         return sorted;
     }
 }
