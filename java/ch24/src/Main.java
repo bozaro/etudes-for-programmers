@@ -23,23 +23,21 @@ public class Main {
             }
             System.out.println(shift + ": " + x);
         }
-        if (true) return;
-
-
-        float hitMin = getFreq(alphabet.getFrequency());
-        float hitMax = 1.0F / alphabet.getFrequency().length;
-        float hitLine = (hitMax * hitMax + hitMin * hitMin) / 2.0F;
-        try (InputStreamReader reader = new InputStreamReader(Main.class.getResourceAsStream("crypto.txt"), StandardCharsets.UTF_8)) {
-            int[] crypto = loadCrypto(reader, alphabet);
-            for (int i = 1; i <= 20; ++i) {
-                float hit = checkKeywordLength(crypto, alphabet, i);
-                if (hit > hitLine) {
-                    System.out.println(i + ": " + hit);
-                    getFreqKeyword(crypto, alphabet, i);
+        if (false) {
+            float hitMin = getFreq(alphabet.getFrequency());
+            float hitMax = 1.0F / alphabet.getFrequency().length;
+            float hitLine = (hitMax * hitMax + hitMin * hitMin) / 2.0F;
+            try (InputStreamReader reader = new InputStreamReader(Main.class.getResourceAsStream("crypto.txt"), StandardCharsets.UTF_8)) {
+                int[] crypto = loadCrypto(reader, alphabet);
+                for (int i = 1; i <= 20; ++i) {
+                    float hit = checkKeywordLength(crypto, alphabet, i);
+                    if (hit > hitLine) {
+                        System.out.println(i + ": " + hit);
+                        getFreqKeyword(crypto, alphabet, i);
+                    }
                 }
             }
         }
-
 
         String text = "ВАРИАНТ RUNNING KEY (БЕГУЩИЙ КЛЮЧ) ШИФРА ВИЖЕНЕРА КОГДА-ТО БЫЛ НЕВЗЛАМЫВАЕМЫМ. ЭТА ВЕРСИЯ ИСПОЛЬЗУЕТ В КАЧЕСТВЕ КЛЮЧА БЛОК ТЕКСТА, РАВНЫЙ ПО ДЛИНЕ ИСХОДНОМУ ТЕКСТУ. ТАК КАК КЛЮЧ РАВЕН ПО ДЛИНЕ СООБЩЕНИЮ, ТО МЕТОДЫ ПРЕДЛОЖЕННЫЕ ФРИДМАНОМ И КАСИСКИ НЕ РАБОТАЮТ (ТАК КАК КЛЮЧ НЕ ПОВТОРЯЕТСЯ). В 1920 ГОДУ ФРИДМАН ПЕРВЫМ ОБНАРУЖИЛ НЕДОСТАТКИ ЭТОГО ВАРИАНТА. ПРОБЛЕМА С RUNNING KEY ШИФРА ВИЖЕНЕРА СОСТОИТ В ТОМ, ЧТО КРИПТОАНАЛИТИК ИМЕЕТ СТАТИСТИЧЕСКУЮ ИНФОРМАЦИЮ О КЛЮЧЕ (УЧИТЫВАЯ, ЧТО БЛОК ТЕКСТА НАПИСАН НА ИЗВЕСТНОМ ЯЗЫКЕ) И ЭТА ИНФОРМАЦИЯ БУДЕТ ОТРАЖАТЬСЯ В ШИФРОВАННОМ ТЕКСТЕ. ЕСЛИ КЛЮЧ ДЕЙСТВИТЕЛЬНО СЛУЧАЙНЫЙ, ЕГО ДЛИНА РАВНА ДЛИНЕ СООБЩЕНИЯ И ОН ИСПОЛЬЗОВАЛСЯ ЕДИНОЖДЫ, ТО ШИФР ВИЖЕНЕРА ТЕОРЕТИЧЕСКИ БУДЕТ НЕВЗЛАМЫВАЕМЫМ."
                 + "ВИЖЕНЕР ФАКТИЧЕСКИ ИЗОБРЁЛ БОЛЕЕ СТОЙКИЙ ШИФР — ШИФР С АВТОКЛЮЧОМ. НЕСМОТРЯ НА ЭТО, «ШИФР ВИЖЕНЕРА» АССОЦИИРУЕТСЯ С БОЛЕЕ ПРОСТЫМ МНОГОАЛФАВИТНЫМ ШИФРОМ. ФАКТИЧЕСКИ ЭТИ ДВА ШИФРА ЧАСТО ПУТАЛИ, НАЗЫВАЯ ИХ LE CHIFFRE INDECHIFFRABLE. БЕББИДЖ ФАКТИЧЕСКИ ВЗЛОМАЛ БОЛЕЕ СТОЙКИЙ ШИФР С АВТОКЛЮЧОМ, В ТО ВРЕМЯ КОГДА КАСИСКИ ИЗДАЛ ПЕРВОЕ РЕШЕНИЕ ВЗЛОМА МНОГОАЛФАВИТНОГО ШИФРА С ФИКСИРОВАННЫМ КЛЮЧОМ. МЕТОД ВИЖЕНЕРА ЗАШИФРОВКИ И РАСШИФРОВКИ СООБЩЕНИЙ ИНОГДА ОТНОСИТСЯ К «ВАРИАНТУ БИТФОРДА». ЕГО ОТЛИЧИЕ ОТ ШИФРА БИТФОРДА, ИЗОБРЕТЕННОГО СЭРОМ ФРЕНСИСОМ БИТФОРДОМ, КОТОРЫЙ, ТЕМ НЕ МЕНЕЕ, ПОДОБЕН ШИФРУ ВИЖЕНЕРА, ЗАКЛЮЧАЕТСЯ В ИСПОЛЬЗОВАНИИ НЕМНОГО ИЗМЕНЕННОГО МЕХАНИЗМА ШИФРОВАНИЯ И ТАБЛИЦ."
@@ -97,6 +95,44 @@ public class Main {
             table[i % length][crypto[i]]++;
             counts[i % length]++;
         }
+
+
+        double[][][] p = new double[length][][];
+        for (int k = 0; k < length; ++k) {
+            p[k] = new double[freq.length][];
+            for (int i = 0; i < freq.length; ++i) {
+                p[k][i] = new double[freq.length];
+                for (int j = 0; j < freq.length; ++j) {
+                    double sum = 0;
+                    for (int m = 0; m < freq.length; ++m) {
+                        sum += Math.pow(freq[m], table[k][j]) * Math.pow(1 - freq[m], counts[k] - table[k][j]);
+                    }
+                    p[k][i][j] = Math.pow(freq[i], table[k][j]) * Math.pow((1 - freq[i]), counts[k] - table[k][j]) / sum;
+                }
+            }
+        }
+
+
+        double[][][] px = new double[length][][];
+        for (int k = 0; k < length; ++k) {
+            px[k] = new double[length][];
+            for (int l = 0; l < length; ++l) {
+                px[k][l] = new double[freq.length];
+                for (int r = 0; r < freq.length; ++r) {
+                    double mul = 1.0F;
+                    for (int j = 0; j < freq.length; ++j) {
+                        double sum = 0;
+                        for (int i = 0; i < freq.length; ++i) {
+                            sum += p[k][i][j] * p[l][(i + r) % freq.length][j];
+                        }
+                        mul *= sum;
+                    }
+                    px[k][l][r] = mul;
+                }
+            }
+        }
+
+
         int[] result = new int[length];
         for (int i = 1; i < length; ++i) {
             long[] freqShift = new long[freq.length];
@@ -114,10 +150,6 @@ public class Main {
                 }
             }
             result[i] = shift;
-        }
-        // todo: Хак
-        if (result.length > 3) {
-            //result[2] -= 3;
         }
         for (int i = 0; i < freq.length; ++i) {
             StringBuilder key = new StringBuilder();
