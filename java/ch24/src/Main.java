@@ -3,10 +3,7 @@ import ch24.decrypt.Vigenere;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,33 +20,37 @@ public class Main {
             }
             System.out.println(shift + ": " + x);
         }
-        if (false) {
+
+        if (true) {
             float hitMin = getFreq(alphabet.getFrequency());
             float hitMax = 1.0F / alphabet.getFrequency().length;
             float hitLine = (hitMax * hitMax + hitMin * hitMin) / 2.0F;
+            boolean[] mark = new boolean[20];
             try (InputStreamReader reader = new InputStreamReader(Main.class.getResourceAsStream("crypto.txt"), StandardCharsets.UTF_8)) {
                 int[] crypto = loadCrypto(reader, alphabet);
-                for (int i = 1; i <= 20; ++i) {
+                for (int i = 1; i < mark.length; ++i) {
+                    if (mark[i]) continue;
                     float hit = checkKeywordLength(crypto, alphabet, i);
                     if (hit > hitLine) {
+                        for (int j = 0; j < mark.length; j += i) {
+                            mark[j] = true;
+                        }
                         System.out.println(i + ": " + hit);
                         getFreqKeyword(crypto, alphabet, i);
                     }
                 }
             }
+            /*if (true)
+                return;*/
         }
 
         String text = "ВАРИАНТ RUNNING KEY (БЕГУЩИЙ КЛЮЧ) ШИФРА ВИЖЕНЕРА КОГДА-ТО БЫЛ НЕВЗЛАМЫВАЕМЫМ. ЭТА ВЕРСИЯ ИСПОЛЬЗУЕТ В КАЧЕСТВЕ КЛЮЧА БЛОК ТЕКСТА, РАВНЫЙ ПО ДЛИНЕ ИСХОДНОМУ ТЕКСТУ. ТАК КАК КЛЮЧ РАВЕН ПО ДЛИНЕ СООБЩЕНИЮ, ТО МЕТОДЫ ПРЕДЛОЖЕННЫЕ ФРИДМАНОМ И КАСИСКИ НЕ РАБОТАЮТ (ТАК КАК КЛЮЧ НЕ ПОВТОРЯЕТСЯ). В 1920 ГОДУ ФРИДМАН ПЕРВЫМ ОБНАРУЖИЛ НЕДОСТАТКИ ЭТОГО ВАРИАНТА. ПРОБЛЕМА С RUNNING KEY ШИФРА ВИЖЕНЕРА СОСТОИТ В ТОМ, ЧТО КРИПТОАНАЛИТИК ИМЕЕТ СТАТИСТИЧЕСКУЮ ИНФОРМАЦИЮ О КЛЮЧЕ (УЧИТЫВАЯ, ЧТО БЛОК ТЕКСТА НАПИСАН НА ИЗВЕСТНОМ ЯЗЫКЕ) И ЭТА ИНФОРМАЦИЯ БУДЕТ ОТРАЖАТЬСЯ В ШИФРОВАННОМ ТЕКСТЕ. ЕСЛИ КЛЮЧ ДЕЙСТВИТЕЛЬНО СЛУЧАЙНЫЙ, ЕГО ДЛИНА РАВНА ДЛИНЕ СООБЩЕНИЯ И ОН ИСПОЛЬЗОВАЛСЯ ЕДИНОЖДЫ, ТО ШИФР ВИЖЕНЕРА ТЕОРЕТИЧЕСКИ БУДЕТ НЕВЗЛАМЫВАЕМЫМ."
-                + "ВИЖЕНЕР ФАКТИЧЕСКИ ИЗОБРЁЛ БОЛЕЕ СТОЙКИЙ ШИФР — ШИФР С АВТОКЛЮЧОМ. НЕСМОТРЯ НА ЭТО, «ШИФР ВИЖЕНЕРА» АССОЦИИРУЕТСЯ С БОЛЕЕ ПРОСТЫМ МНОГОАЛФАВИТНЫМ ШИФРОМ. ФАКТИЧЕСКИ ЭТИ ДВА ШИФРА ЧАСТО ПУТАЛИ, НАЗЫВАЯ ИХ LE CHIFFRE INDECHIFFRABLE. БЕББИДЖ ФАКТИЧЕСКИ ВЗЛОМАЛ БОЛЕЕ СТОЙКИЙ ШИФР С АВТОКЛЮЧОМ, В ТО ВРЕМЯ КОГДА КАСИСКИ ИЗДАЛ ПЕРВОЕ РЕШЕНИЕ ВЗЛОМА МНОГОАЛФАВИТНОГО ШИФРА С ФИКСИРОВАННЫМ КЛЮЧОМ. МЕТОД ВИЖЕНЕРА ЗАШИФРОВКИ И РАСШИФРОВКИ СООБЩЕНИЙ ИНОГДА ОТНОСИТСЯ К «ВАРИАНТУ БИТФОРДА». ЕГО ОТЛИЧИЕ ОТ ШИФРА БИТФОРДА, ИЗОБРЕТЕННОГО СЭРОМ ФРЕНСИСОМ БИТФОРДОМ, КОТОРЫЙ, ТЕМ НЕ МЕНЕЕ, ПОДОБЕН ШИФРУ ВИЖЕНЕРА, ЗАКЛЮЧАЕТСЯ В ИСПОЛЬЗОВАНИИ НЕМНОГО ИЗМЕНЕННОГО МЕХАНИЗМА ШИФРОВАНИЯ И ТАБЛИЦ."
-                + "НЕСМОТРЯ НА ОЧЕВИДНУЮ СТОЙКОСТЬ ШИФРА ВИЖЕНЕРА, ОН ШИРОКО НЕ ИСПОЛЬЗОВАЛСЯ В ЕВРОПЕ. БОЛЬШЕЕ РАСПРОСТРАНЕНИЕ ПОЛУЧИЛ ШИФР ГРОНСФИЛДА, СОЗДАННЫЙ ГРАФОМ ГРОНСФИЛДОМ, ИДЕНТИЧНЫЙ ШИФРУ ВИЖЕНЕРА, ЗА ИСКЛЮЧЕНИЕМ ТОГО, ЧТО ОН ИСПОЛЬЗОВАЛ ТОЛЬКО 10 РАЗЛИЧНЫХ АЛФАВИТОВ (СООТВЕТСТВУЮЩИХ ЦИФРАМ ОТ 0 ДО 9). ПРЕИМУЩЕСТВО ШИФРА ГРОНСФИЛДА СОСТОИТ В ТОМ, ЧТО В КАЧЕСТВЕ КЛЮЧА ИСПОЛЬЗУЕТСЯ НЕ СЛОВО, А НЕДОСТАТОК — В НЕБОЛЬШОМ КОЛИЧЕСТВЕ АЛФАВИТОВ. ШИФР ГРОНСФИЛДА ШИРОКО ИСПОЛЬЗОВАЛСЯ ПО ВСЕЙ ГЕРМАНИИ И ЕВРОПЕ, НЕСМОТРЯ НА ЕГО НЕДОСТАТКИ."
-                + "ЗАМИНКИ НА ЭТАПЕ ВВОДА ДАННЫХ ДЛЯ КОРРЕКТНОГО ОФОРМЛЕНИЯ ЗАКАЗА МОГУТ ПРИВЕСТИ К ТОМУ, ЧТО ПОЛЬЗОВАТЕЛЬ ВОВСЕ ОТКАЖЕТСЯ ОТ ПОКУПКИ, ТАК КАК НЕТ НИЧЕГО БОЛЕЕ РАЗДРАЖАЮЩЕГО, ЧЕМ ПОСЛЕ НАЖАТИЯ КНОПКИ О ПОДТВЕРЖДЕНИИ ЗАКАЗА ОБНАРУЖИТЬ, ЧТО КАКИЕ-ТО ПОЛЯ БЫЛИ ЗАПОЛНЕНЫ НЕВЕРНО. ВСТРОЕННАЯ ПРЕДВАРИТЕЛЬНАЯ ПРОВЕРКА ПРАВИЛЬНОСТИ ЗАПОЛНЕНИЯ ПОЛЕЙ ЗНАЧИТЕЛЬНО УВЕЛИЧИТ ВЕРОЯТНОСТЬ ТОГО, ЧТО ВАШ КЛИЕНТ С ПЕРВОГО РАЗА ПРАВИЛЬНО ЗАПОЛНИТ ВСЕ НЕОБХОДИМЫЕ ФОРМЫ И ОСТАНЕТСЯ ДОВОЛЕН СЕРВИСОМ, А ВЫ, В СВОЮ ОЧЕРЕДЬ ПОЛУЧИТЕ КОРРЕКТНО ЗАПОЛНЕННЫЙ ЗАКАЗ И СНИЗИТЕ ВЕРОЯТНОСТЬ ОШИБОК.\n"
-                + "ДОПОЛНИТЕЛЬНЫМ ПРЕИМУЩЕСТВОМ ДАННОЙ ФУНКЦИИ ТАКЖЕ ЯВЛЯЕТСЯ ВОЗМОЖНОСТЬ НАЛАДИТЬ ДИАЛОГ С ПОЛЬЗОВАТЕЛЕМ ПОСРЕДСТВОМ КОРОТКИХ СООБЩЕНИЙ РЯДОМ С ПОЛЯМИ (КАК КОРРЕКТНО ЗАПОЛНЕННЫМИ, ТАК И НЕТ), ЧТО УЛУЧШИТ ОБЩЕЕ ВПЕЧАТЛЕНИЕ О ВАШЕМ МАГАЗИНЕ И ЗАСТАВИТ ПОКУПАТЕЛЯ В ОЧЕРЕДНОЙ РАЗ ВОЗВРАЩАТЬСЯ ИМЕННО К ВАМ. СТОИТ, ОДНАКО, ДОБАВИТЬ ВАЖНОЕ ЗАМЕЧАНИЕ: КАК УПОМИНАЛОСЬ В СТАТЬЕ “THE STATE OF E-COMMERCE CHECKOUT DESIGN 2012” В ЖУРНАЛЕ SMASHING MAGAZINE, ПРОВЕРКА КОРРЕКТНОСТИ ПОЛЕЙ С АДРЕСАМИ НЕ ВСЕГДА ЯВЛЯЕТСЯ ПОДХОДЯЩИМ РЕШЕНИЕМ. ПРИЧИНА В ТОМ, ЧТО САЙТЫ, КОТОРЫЕ ОТКАЗЫВАЮТ ПОЛЬЗОВАТЕЛЮ В ОФОРМЛЕНИИ ЗАКАЗА ИЗ-ЗА НЕПОДХОДЯЩЕГО ФОРМАТА АДРЕСА, ОДНОЗНАЧНО БУДУТ ТЕРЯТЬ КЛИЕНТОВ. ИМЕННО ПОЭТОМУ ПРОВЕРКОЙ ПОЛЕЙ С АДРЕСАМИ ЛУЧШЕ ПРЕНЕБРЕЧЬ.\n"
                 + "А ВОТ ГДЕ КОРРЕКТНОСТЬ ДЕЙСТВИТЕЛЬНО ВАЖНА, ТАК ЭТО В ПОЛЯХ С АДРЕСОМ ЭЛЕКТРОННОЙ ПОЧТЫ, НОМЕРОМ БАНКОВСКОЙ КАРТЫ, ZIP КОДОМ И Т.Д." +
                 "НЕКОТОРЫЕ ИНТЕРНЕТ-МАГАЗИНЫ НЕ ТОРОПЯТСЯ ОТПРАВЛЯТЬ ПОКУПАТЕЛЯ К ОФОРМЛЕНИЮ ЗАКАЗА СРАЗУ ПОСЛЕ ДОБАВЛЕНИЯ ТОВАРА В КОРЗИНУ И ПРАВИЛЬНО ДЕЛАЮТ. ЭТО ДАЕТ ПОЛЬЗОВАТЕЛЮ СТИМУЛ К ПРОДОЛЖЕНИЮ ВИРТУАЛЬНОГО ШОПИНГА И, В КОНЦЕ КОНЦОВ, УВЕЛИЧИВАЕТ ДОХОДЫ МАГАЗИНА. КАК РАЗ ЗДЕСЬ АНИМИРОВАННАЯ КОРЗИНА И ВСТУПАЕТ В ИГРУ. ЭТО ЭФФЕКТИВНЫЙ СПОСОБ ДАТЬ ПОЛЬЗОВАТЕЛЮ ПОДТВЕРЖДЕНИЕ, ЧТО ВЫБРАННЫЙ ТОВАР УЖЕ ПОМЕЩЕН В ЕГО КОРЗИНУ И ЧТО В ЛЮБОЙ МОМЕНТ ОН МОЖЕТ ЗАВЕРШИТЬ ОФОРМЛЕНИЕ ЗАКАЗА, ПРИ ЭТОМ, НЕ ОТВЛЕКАЯ ЕГО ОТ ДАЛЬНЕЙШЕГО ШОПИНГА.\n" +
                 "ИНТЕРНЕТ-МАГАЗИН AMERICAN EAGLE РАСКРЫВАЕТ ПЕРЕД ПОЛЬЗОВАТЕЛЕМ СПЕЦИАЛЬНУЮ ОБЛАСТЬ В НИЖНЕЙ ЧАСТИ ЭКРАНА, В КОТОРОЙ ОТОБРАЖАЕТСЯ ДОБАВЛЕННЫЙ В КОРЗИНУ ТОВАР, ДЕТАЛИ ТРАНЗАКЦИИ И КНОПКА СОВЕРШЕНИЯ ЗАКАЗА." +
                 "КАК ТОЛЬКО ДЛИНА КЛЮЧА СТАНОВИТСЯ ИЗВЕСТНОЙ, ЗАШИФРОВАННЫЙ ТЕКСТ МОЖНО ЗАПИСАТЬ ВО МНОЖЕСТВО СТОЛБЦОВ, КАЖДЫЙ ИЗ КОТОРЫХ СООТВЕТСТВУЕТ ОДНОМУ СИМВОЛУ КЛЮЧА. КАЖДЫЙ СТОЛБЕЦ СОСТОИТ ИЗ ИСХОДНОГО ТЕКСТА, КОТОРЫЙ ЗАШИФРОВАН ШИФРОМ ЦЕЗАРЯ; КЛЮЧ К ШИФРУ ЦЕЗАРЯ ЯВЛЯЕТСЯ ВСЕГО-НАВСЕГО ОДНИМ СИМВОЛОМ КЛЮЧА ДЛЯ ШИФРА ВИЖЕНЕРА, КОТОРЫЙ ИСПОЛЬЗУЕТСЯ В ЭТОМ СТОЛБЦЕ. ИСПОЛЬЗУЯ МЕТОДЫ, ПОДОБНЫЕ МЕТОДАМ ВЗЛОМА ШИФРА ЦЕЗАРЯ, МОЖНО РАСШИФРОВАТЬ ЗАШИФРОВАННЫЙ ТЕКСТ. УСОВЕРШЕНСТВОВАНИЕ ТЕСТА КАСИСКИ, ИЗВЕСТНОЕ КАК МЕТОД КИРХГОФА, ЗАКЛЮЧАЕТСЯ В СРАВНЕНИИ ЧАСТОТЫ ПОЯВЛЕНИЯ СИМВОЛОВ В СТОЛБЦАХ С ЧАСТОТОЙ ПОЯВЛЕНИЯ СИМВОЛОВ В ИСХОДНОМ ТЕКСТЕ ДЛЯ НАХОЖДЕНИЯ КЛЮЧЕВОГО СИМВОЛА ДЛЯ ЭТОГО СТОЛБЦА. КОГДА ВСЕ СИМВОЛЫ КЛЮЧА ИЗВЕСТНЫ, КРИПТОАНАЛИТИК МОЖЕТ ЛЕГКО РАСШИФРОВАТЬ ШИФРОВАННЫЙ ТЕКСТ, ПОЛУЧИВ ИСХОДНЫЙ ТЕКСТ. МЕТОД КИРХГОФА НЕ ПРИМЕНИМ, КОГДА ТАБЛИЦА ВИЖЕНЕРА СКРЕМБЛИРОВАНА, ВМЕСТО ИСПОЛЬЗОВАНИЯ ОБЫЧНОЙ АЛФАВИТНОЙ ПОСЛЕДОВАТЕЛЬНОСТИ, ХОТЯ ТЕСТ КАСИСКИ И ТЕСТЫ СОВПАДЕНИЯ ВСЁ ЕЩЁ МОГУТ ИСПОЛЬЗОВАТЬСЯ ДЛЯ ОПРЕДЕЛЕНИЯ ДЛИНЫ КЛЮЧА ДЛЯ ЭТОГО СЛУЧАЯ."
                         .replaceAll("Ё", "Е");
-        findWords(Vigenere.encrypt("АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "А", text));
+        findWords(Vigenere.encrypt("АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "А", text).substring(0, 500));
         // ОЕАИТНСВРЛКМДПЗЯЧФУЫЬГБШЙЖЮХЦЭЩЪ
         // ОЕАИНТСРВЛКМДПУЯЫЬГЗБЧЙХЖШЮЦЩЭФЪ
         // ОАЕИНТРСЛМВПКДЯЫБЗУГЬЧЙХЦЖЮЩФЭШЪ
@@ -59,8 +60,8 @@ public class Main {
         String base = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         String crypt = "ЗУШВЬЯЖЩКГЛФМДПЪЫНЮОСИЙТЧБАЭХЦЕР";
         //crypt = base;
-        String crypto = Vigenere.encrypt(base, crypt, "ЛИСП", text);
-        getFreqKeyword(Vigenere.strToIdx(Vigenere.createAlphabet(base), crypto), alphabet, 4);
+        String crypto = Vigenere.encrypt(base, crypt, "ПОДЛЮЕМ", text);
+        getFreqKeyword(Vigenere.strToIdx(Vigenere.createAlphabet(base), crypto), alphabet, 7);
         /*
         crypto = Vigenere.encrypt(base, "БВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯА", "А", text);
         getFreqKeyword(Vigenere.strToIdx(Vigenere.createAlphabet(base), crypto), alphabet, 1);*/
@@ -132,25 +133,22 @@ public class Main {
             }
         }
 
-
-        int[] result = new int[length];
-        for (int i = 1; i < length; ++i) {
-            long[] freqShift = new long[freq.length];
-            for (int testShift = 0; testShift < freq.length; ++testShift) {
-                long testFreq = 0;
-                for (int j = 0; j < freq.length; j++) {
-                    testFreq += table[0][j] * table[i][(j + testShift) % freq.length];
-                }
-                freqShift[testShift] = testFreq;
-            }
-            int shift = 0;
-            for (int j = 0; j < freqShift.length; ++j) {
-                if (freqShift[shift] < freqShift[j]) {
-                    shift = j;
+        double[][][] pp = new double[length][][];
+        for (int k = 0; k < length; ++k) {
+            pp[k] = new double[length][];
+            for (int l = 0; l < length; ++l) {
+                pp[k][l] = new double[freq.length];
+                for (int r = 0; r < freq.length; ++r) {
+                    double sum = 0;
+                    for (int s = 0; s < freq.length; ++s) {
+                        sum += px[k][l][s];
+                    }
+                    pp[k][l][r] = px[k][l][r] / sum;
                 }
             }
-            result[i] = shift;
         }
+
+        int[] result = findKeyword(alphabet, pp);
         for (int i = 0; i < freq.length; ++i) {
             StringBuilder key = new StringBuilder();
             float x = 0;
@@ -159,9 +157,9 @@ public class Main {
                 key.append(alphabet.getAlphabet().charAt(charIndex));
                 x += freq[charIndex] / length;
             }
-            if (x > 0.035) {
-                System.out.println(key.toString() + ": " + x);
-            }
+            //if (x > 0.035) {
+            System.out.println(key.toString() + ": " + x);
+            //}
         }
 
         List<Integer> remap = new ArrayList<>();
@@ -203,6 +201,160 @@ public class Main {
         findWords(text1);
     }
 
+    private static int[] findKeyword(Alphabet alphabet, final double[][][] pp) {
+        boolean[][][] shifts = new boolean[pp.length][][];
+        float[] freq = alphabet.getFrequency();
+        double alpha = 1.0 / freq.length;
+        for (int i = 0; i < pp.length; ++i) {
+            shifts[i] = new boolean[pp.length][];
+            for (int j = 0; j < pp.length; ++j) {
+                if (i == j) {
+                    continue;
+                }
+                shifts[i][j] = new boolean[freq.length];
+                for (int k = 0; k < freq.length; ++k) {
+                    shifts[i][j][k] = pp[i][j][k] > alpha;
+                }
+            }
+        }
+        for (; ; ) {
+            System.out.println("========================");
+            int changed = 0;
+            for (int i = 0; i < pp.length; ++i) {
+                for (int j = 0; j < pp.length; ++j) {
+                    if (i == j) {
+                        continue;
+                    }
+                    for (int k = 0; k < freq.length; ++k) {
+                        if (!shifts[i][j][k]) {
+                            continue;
+                        }
+
+                        int rate = 0;
+                        for (int a = 0; a < pp.length; ++a) {
+                            for (int l = 0; l < freq.length; ++l) {
+                                if ((a == i) || (a == j)) {
+                                    continue;
+                                }
+                                if (!shifts[a][i][l]) {
+                                    continue;
+                                }
+                                if (!shifts[i][a][(freq.length - l) % freq.length]) {
+                                    continue;
+                                }
+                                if (!shifts[a][j][(l + k) % freq.length]) {
+                                    continue;
+                                }
+                                if (!shifts[j][a][(freq.length * 2 - l - k) % freq.length]) {
+                                    continue;
+                                }
+                                rate++;
+                            }
+                        }
+                        //System.out.println(i + ":" + j + ":" + k + " = " + rate + (rate == 0 ? " !!!" : ""));
+                        if (rate == 0) {
+                            shifts[i][j][k] = false;
+                            changed++;
+                            break;
+                        }
+                    }
+                }
+            }
+            System.out.println("Pass: " + changed);
+            if (changed == 0) {
+                break;
+            }
+        }
+        int minP = Integer.MAX_VALUE;
+        int offsets[][] = new int[pp.length][];
+
+        for (int a = 0; a < pp.length; ++a) {
+            int x = 0;
+            int p = 1;
+            System.out.println("");
+            for (int i = 0; i < pp.length; ++i) {
+                StringBuilder sb = new StringBuilder("");
+                sb.append(i).append(": ");
+                if (shifts[a][i] != null) {
+                    int y = 0;
+                    for (int j = 0; j < freq.length; ++j) {
+                        if (shifts[a][i][j]) {
+                            sb.append(j).append(",");
+                            x++;
+                            y++;
+                        }
+                    }
+                    p *= y;
+                } else {
+                    sb.append("-");
+                }
+                System.out.println(sb.toString());
+            }
+            System.out.println(x + " - " + p);
+
+            //p = a; // todo: xxx
+            if (p < minP) {
+                minP = p;
+                for (int i = 0; i < pp.length; ++i) {
+                    if (a == i) {
+                        offsets[i] = new int[]{0};
+                        continue;
+                    }
+                    int[] offset = new int[freq.length];
+                    int len = 0;
+                    for (int j = 0; j < freq.length; ++j) {
+                        if (shifts[a][i][j]) {
+                            offset[len] = j;
+                            len++;
+                        }
+                    }
+                    offsets[i] = Arrays.copyOf(offset, len);
+                }
+            }
+        }
+
+
+        int[] result = new int[pp.length];
+        int index[] = new int[pp.length];
+        double maxP = 0;
+        for (; ; ) {
+            double p = 1.0;
+
+            for (int i = 0; i < pp.length; ++i) {
+                for (int j = 0; j < pp.length; ++j) {
+                    if (i != j) {
+                        int a = offsets[i][index[i]];
+                        int b = offsets[j][index[j]];
+                        int c = (freq.length + b - a) % freq.length;
+                        p *= pp[i][j][c];
+                    }
+                }
+            }
+
+            if (maxP < p) {
+                maxP = p;
+                for (int i = 0; i < index.length; ++i) {
+                    result[i] = (freq.length + offsets[i][index[i]] - offsets[0][index[0]]) % freq.length;
+                }
+                System.out.println(Arrays.toString(result) + ": " + p);
+            }
+
+            int i = 0;
+            while (i < index.length) {
+                index[i]++;
+                if (index[i] < offsets[i].length) {
+                    break;
+                }
+                index[i] = 0;
+                ++i;
+            }
+            if (i >= index.length) {
+                break;
+            }
+        }
+        return result;
+    }
+
     private static void findWords(String text1) {
         boolean[] mark = new boolean[text1.length()];
         for (int l = 10; l >= 4; --l) {
@@ -218,7 +370,7 @@ public class Main {
                         }
                     }
                     if (ok) {
-                        System.out.println(text1.substring(i, i + l));
+                        //System.out.println(text1.substring(i, i + l));
                         for (int k = 0; k < l; ++k) {
                             mark[i + k] = true;
                             mark[j + k] = true;
