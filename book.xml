@@ -968,7 +968,7 @@
                       <m:msub>
                         <m:mi>x</m:mi>
 
-                        <m:mi>i</m:mi>
+                        <m:mi>m</m:mi>
                       </m:msub>
                     </m:mrow>
                   </m:mfenced>
@@ -990,7 +990,7 @@
       <symbol>k</symbol>-й. Для оценки вероятностей
       <symbol>p<subscript>k,l,r</subscript></symbol> того, что между
       <symbol>k</symbol>-й и <symbol>l</symbol>-й групнами имеется сдвиг
-      <symbol>r</symbol>, вычислим величины </para>
+      <symbol>r</symbol>, вычислим величины</para>
 
       <equation>
         <m:math display="block">
