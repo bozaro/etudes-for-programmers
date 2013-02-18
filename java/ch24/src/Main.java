@@ -3,7 +3,9 @@ import ch24.decrypt.Vigenere;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +23,7 @@ public class Main {
             System.out.println(shift + ": " + x);
         }
 
-        if (false) {
+        if (true) {
             float hitMin = getFreq(alphabet.getFrequency());
             float hitMax = 1.0F / alphabet.getFrequency().length;
             float hitLine = (hitMax * hitMax + hitMin * hitMin) / 2.0F;
@@ -40,8 +42,8 @@ public class Main {
                     }
                 }
             }
-            /*if (true)
-                return;*/
+            if (true)
+                return;
         }
 
         String text = "ВАРИАНТ RUNNING KEY (БЕГУЩИЙ КЛЮЧ) ШИФРА ВИЖЕНЕРА КОГДА-ТО БЫЛ НЕВЗЛАМЫВАЕМЫМ. ЭТА ВЕРСИЯ ИСПОЛЬЗУЕТ В КАЧЕСТВЕ КЛЮЧА БЛОК ТЕКСТА, РАВНЫЙ ПО ДЛИНЕ ИСХОДНОМУ ТЕКСТУ. ТАК КАК КЛЮЧ РАВЕН ПО ДЛИНЕ СООБЩЕНИЮ, ТО МЕТОДЫ ПРЕДЛОЖЕННЫЕ ФРИДМАНОМ И КАСИСКИ НЕ РАБОТАЮТ (ТАК КАК КЛЮЧ НЕ ПОВТОРЯЕТСЯ). В 1920 ГОДУ ФРИДМАН ПЕРВЫМ ОБНАРУЖИЛ НЕДОСТАТКИ ЭТОГО ВАРИАНТА. ПРОБЛЕМА С RUNNING KEY ШИФРА ВИЖЕНЕРА СОСТОИТ В ТОМ, ЧТО КРИПТОАНАЛИТИК ИМЕЕТ СТАТИСТИЧЕСКУЮ ИНФОРМАЦИЮ О КЛЮЧЕ (УЧИТЫВАЯ, ЧТО БЛОК ТЕКСТА НАПИСАН НА ИЗВЕСТНОМ ЯЗЫКЕ) И ЭТА ИНФОРМАЦИЯ БУДЕТ ОТРАЖАТЬСЯ В ШИФРОВАННОМ ТЕКСТЕ. ЕСЛИ КЛЮЧ ДЕЙСТВИТЕЛЬНО СЛУЧАЙНЫЙ, ЕГО ДЛИНА РАВНА ДЛИНЕ СООБЩЕНИЯ И ОН ИСПОЛЬЗОВАЛСЯ ЕДИНОЖДЫ, ТО ШИФР ВИЖЕНЕРА ТЕОРЕТИЧЕСКИ БУДЕТ НЕВЗЛАМЫВАЕМЫМ."
@@ -57,7 +59,7 @@ public class Main {
 
         // ОЕАИНТСРВЛКМДПУЯЫЬГЗБЧЙХЖШЮЦЩЭФЪ
         // оеанитслвркдмумяьыгбчзжйшхюэцщфъ
-        String base  = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        String base = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         String crypt = "ЗУШВЬЯЖЩКГЛФМДПЪЫНЮОСИЙТЧБАЭХЦЕР";
         //crypt = base;
         String crypto = Vigenere.encrypt(base, crypt, "РЕДИСКА", text);
@@ -86,6 +88,8 @@ public class Main {
     }
 
     private static void getFreqKeyword(int[] crypto, Alphabet alphabet, int length) {
+        // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
+        // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
         final float[] freq = alphabet.getFrequency();
         int[] counts = new int[length];
         int[][] table = new int[length][];
@@ -176,11 +180,15 @@ public class Main {
         }
 
 
-        result = Vigenere.strToIdx(Vigenere.createAlphabet(alphabet.getAlphabet()), "РЕДИСКА");
+        int[] keyword = Vigenere.strToIdx(Vigenere.createAlphabet(alphabet.getAlphabet()), "РЕДИСКА");
         for (int i = 0; i < result.length; ++i) {
-            result[i] = result[i] = (freq.length - result[i]) % freq.length;
+            result[i] = (freq.length - keyword[i]) % freq.length;
         }
 
+        int abc[] = new int[freq.length];
+        for (int i = 0; i < freq.length; ++i) {
+            abc[i] = -1;
+        }
         for (int i = 0; i < freq.length; ++i) {
             double pMax = 0;
             int found = 0;
@@ -189,50 +197,49 @@ public class Main {
                 for (int k = 0; k < result.length; ++k) {
                     pShift *= p[k][(freq.length + j + result[k]) % freq.length][i];
                 }
+                if (abc[j] >= 0) {
+                    continue;
+                }
                 if (pMax < pShift) {
                     found = j;
                     pMax = pShift;
                 }
             }
+            abc[found] = i;
             System.out.println(alphabet.getAlphabet().charAt(i) + " -> " + alphabet.getAlphabet().charAt(found) + ": " + pMax);
         }
 
 
-        List<Integer> remap = new ArrayList<>();
-        final int[] counter = new int[freq.length];
-        for (int i = 0; i < freq.length; ++i) {
-            for (int j = 0; j < result.length; ++j) {
-                counter[i] += table[j][(freq.length + i + result[j]) % freq.length];
-            }
-            //System.out.println(i + ": " + (counter[i] * 1.0 / crypto.length));
-        }
-        for (int i = 0; i < freq.length; ++i) {
-            remap.add(i);
-        }
-        Collections.sort(remap, new Comparator<Integer>() {
-            @Override
-            public int compare(Integer a, Integer b) {
-                return Integer.compare(counter[b], counter[a]);
-            }
-        });
-        int[] invRemap = new int[freq.length];
-        for (int i = 0; i < freq.length; ++i) {
-            invRemap[remap.get(i)] = i;
-        }
+        System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), keyword));
+        System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), abc));
 
-        StringBuilder sabc = new StringBuilder();
-        int[] abc = new int[freq.length];
-        int[] non = new int[freq.length];
-        for (int i = 0; i < freq.length; ++i) {
-            abc[i] = alphabet.getSorted()[invRemap[i]];
-            non[i] = i;
-            sabc.append(alphabet.getAlphabet().charAt(abc[i]));
-        }
-        System.out.println(sabc.toString());
-        int[] text = Vigenere.decrypt(abc, result, crypto);
+        int[] text = Vigenere.decrypt(abc, keyword, crypto);
         //int[] text = Vigenere.decrypt(non, result, crypto);
         String text1 = Vigenere.idxToStr(alphabet.getAlphabet(), text);
-        System.out.println(text1);
+
+        System.out.println(
+                Vigenere.decrypt(alphabet.getAlphabet(),
+                        Vigenere.idxToStr(alphabet.getAlphabet(), abc),
+                        Vigenere.idxToStr(alphabet.getAlphabet(), keyword),
+                        Vigenere.idxToStr(alphabet.getAlphabet(), crypto)
+                )
+        );
+        // ЖНФЖПЕЕЫШВЛПЖАТГФБЦМКЖЬЗАЮЪИВУЩЖРСЮБЬЬКЬЫЕСУУЦТЮБШУНЖЦМЭЭШЮЗУЬЕКНАУЕЫЩШЖРЬЙЛЮПКНДЙЯГЭЪЖЫГЖОУШИШУФГВРШМАГВВУВОСЗХЧИУГНЛАЯЬЬКИЯРЦЖРЫАХЪВИЖГЭЯЦСЪУЫФЯРМЗФЧФЪЩСЬФШВЕОМКТИМБЭВЪКФХЙЦХНЬЮЬМФЛБИМРУЛМЯЗФЧЪЪЧЗНКЗНИВЛНШГЛЩИЛЗНФФУЖКНДЙЯГЭЕУЮЛЛЮЖНЯИЕМДЙШГЯУГВЦФЩВЮМФАГЯВХМЭВВФПГФФЖККГЦМЛЫБШМПУЕШЖЛЯЮЯРЧВЪЖУПВМКЛЫЭСЭЧИРЫГЫЩЗЗЗКЖЛЕШВРЪЧЪААЖЗДХЪФСБРНМЪКЫБЪФУНЦЮБТЖУНЯЕШИМУКФВГВГЧМЭВЗРВМЪЪЕЕТОЯЦБЖГВИЖМДКЗЗПАФЯВНРЫГЮЩЭЯЬЦШЪЧНГВЫАХЪВЛНШАПВЧОЬОЙКЮАШОКЗЛЩУШЯРНЗГХЛТЮЖЫШШГППЬЫШАЬФМАФЕЙЗАЙПЛУЭЖЛЗИЗНЖККРЦЯДЧКНДЙЯГЭБФЬАВБЭКЗФКЫТВЛЕЪЭЯЛЭЩЗНФХГЧКТКЫЮЗЗЪУЖАПВЧОЬОЙКЕСЛЗАЮЪИВУНЫПКЗВЯЪГОСЩЛБЬГМЯВЗГЬКШЪГЙЕНПСМЭВГОГЧСОРГЩОЦМВДГЩКЧЮЗВЗКЦЧЯРЧВЪЖФЫЕЛЖАЪУССХРУОЬЫЕЙГЫОТУЕАГЖГЫСЩИЯРВТЮДЖНЛГЦМЗЬЪЯИЦТРЕМИКЦЩВЦОРЛХМХЖВРЬПУГВЯРЬПМЯЖЖРЧПШЪЧУВГЧСЕЕГЦЬПЗДМОЬОЧЗКВУФЯУПОХЪГЪЭЯЖВЖФ
+        // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
+        text1 = Vigenere.decrypt(alphabet.getAlphabet(),
+              //"ЕХЭАИЯТБОНЪДРГЩЛВУЗШЬЖЮКМПЫФСЙЧЦ",
+              // ++.!+...+...!+++++++++....+.+.+.
+                "ЕХЭАИЯТБОНЪДРГЩКВУЗШЬЖЮЛМПЫФСЙЧЦ",
+//              "ЕХЭАИЯТБОНЪДРГЩКВУЗШЬЖЮЛМПЫФСЙЧЦ",
+                "РЕДИСКА",
+                Vigenere.idxToStr(alphabet.getAlphabet(), crypto)
+        );
+        System.out.println(
+                Vigenere.idxToStr(alphabet.getAlphabet(), crypto)
+        );
+        System.out.println(
+                text1
+        );
 
         findWords(text1);
     }
@@ -406,7 +413,7 @@ public class Main {
                         }
                     }
                     if (ok) {
-                        //System.out.println(text1.substring(i, i + l));
+                        System.out.println(text1.substring(i, i + l));
                         for (int k = 0; k < l; ++k) {
                             mark[i + k] = true;
                             mark[j + k] = true;
