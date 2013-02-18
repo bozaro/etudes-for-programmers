@@ -21,7 +21,7 @@ public class Main {
             System.out.println(shift + ": " + x);
         }
 
-        if (true) {
+        if (false) {
             float hitMin = getFreq(alphabet.getFrequency());
             float hitMax = 1.0F / alphabet.getFrequency().length;
             float hitLine = (hitMax * hitMax + hitMin * hitMin) / 2.0F;
@@ -50,17 +50,17 @@ public class Main {
                 "ИНТЕРНЕТ-МАГАЗИН AMERICAN EAGLE РАСКРЫВАЕТ ПЕРЕД ПОЛЬЗОВАТЕЛЕМ СПЕЦИАЛЬНУЮ ОБЛАСТЬ В НИЖНЕЙ ЧАСТИ ЭКРАНА, В КОТОРОЙ ОТОБРАЖАЕТСЯ ДОБАВЛЕННЫЙ В КОРЗИНУ ТОВАР, ДЕТАЛИ ТРАНЗАКЦИИ И КНОПКА СОВЕРШЕНИЯ ЗАКАЗА." +
                 "КАК ТОЛЬКО ДЛИНА КЛЮЧА СТАНОВИТСЯ ИЗВЕСТНОЙ, ЗАШИФРОВАННЫЙ ТЕКСТ МОЖНО ЗАПИСАТЬ ВО МНОЖЕСТВО СТОЛБЦОВ, КАЖДЫЙ ИЗ КОТОРЫХ СООТВЕТСТВУЕТ ОДНОМУ СИМВОЛУ КЛЮЧА. КАЖДЫЙ СТОЛБЕЦ СОСТОИТ ИЗ ИСХОДНОГО ТЕКСТА, КОТОРЫЙ ЗАШИФРОВАН ШИФРОМ ЦЕЗАРЯ; КЛЮЧ К ШИФРУ ЦЕЗАРЯ ЯВЛЯЕТСЯ ВСЕГО-НАВСЕГО ОДНИМ СИМВОЛОМ КЛЮЧА ДЛЯ ШИФРА ВИЖЕНЕРА, КОТОРЫЙ ИСПОЛЬЗУЕТСЯ В ЭТОМ СТОЛБЦЕ. ИСПОЛЬЗУЯ МЕТОДЫ, ПОДОБНЫЕ МЕТОДАМ ВЗЛОМА ШИФРА ЦЕЗАРЯ, МОЖНО РАСШИФРОВАТЬ ЗАШИФРОВАННЫЙ ТЕКСТ. УСОВЕРШЕНСТВОВАНИЕ ТЕСТА КАСИСКИ, ИЗВЕСТНОЕ КАК МЕТОД КИРХГОФА, ЗАКЛЮЧАЕТСЯ В СРАВНЕНИИ ЧАСТОТЫ ПОЯВЛЕНИЯ СИМВОЛОВ В СТОЛБЦАХ С ЧАСТОТОЙ ПОЯВЛЕНИЯ СИМВОЛОВ В ИСХОДНОМ ТЕКСТЕ ДЛЯ НАХОЖДЕНИЯ КЛЮЧЕВОГО СИМВОЛА ДЛЯ ЭТОГО СТОЛБЦА. КОГДА ВСЕ СИМВОЛЫ КЛЮЧА ИЗВЕСТНЫ, КРИПТОАНАЛИТИК МОЖЕТ ЛЕГКО РАСШИФРОВАТЬ ШИФРОВАННЫЙ ТЕКСТ, ПОЛУЧИВ ИСХОДНЫЙ ТЕКСТ. МЕТОД КИРХГОФА НЕ ПРИМЕНИМ, КОГДА ТАБЛИЦА ВИЖЕНЕРА СКРЕМБЛИРОВАНА, ВМЕСТО ИСПОЛЬЗОВАНИЯ ОБЫЧНОЙ АЛФАВИТНОЙ ПОСЛЕДОВАТЕЛЬНОСТИ, ХОТЯ ТЕСТ КАСИСКИ И ТЕСТЫ СОВПАДЕНИЯ ВСЁ ЕЩЁ МОГУТ ИСПОЛЬЗОВАТЬСЯ ДЛЯ ОПРЕДЕЛЕНИЯ ДЛИНЫ КЛЮЧА ДЛЯ ЭТОГО СЛУЧАЯ."
                         .replaceAll("Ё", "Е");
-        findWords(Vigenere.encrypt("АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "А", text).substring(0, 500));
+        findWords(Vigenere.encrypt("АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ", "А", text).substring(0, 700));
         // ОЕАИТНСВРЛКМДПЗЯЧФУЫЬГБШЙЖЮХЦЭЩЪ
         // ОЕАИНТСРВЛКМДПУЯЫЬГЗБЧЙХЖШЮЦЩЭФЪ
         // ОАЕИНТРСЛМВПКДЯЫБЗУГЬЧЙХЦЖЮЩФЭШЪ
 
         // ОЕАИНТСРВЛКМДПУЯЫЬГЗБЧЙХЖШЮЦЩЭФЪ
         // оеанитслвркдмумяьыгбчзжйшхюэцщфъ
-        String base = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        String base  = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         String crypt = "ЗУШВЬЯЖЩКГЛФМДПЪЫНЮОСИЙТЧБАЭХЦЕР";
         //crypt = base;
-        String crypto = Vigenere.encrypt(base, crypt, "ПОДЛЮЕМ", text);
+        String crypto = Vigenere.encrypt(base, crypt, "РЕДИСКА", text);
         getFreqKeyword(Vigenere.strToIdx(Vigenere.createAlphabet(base), crypto), alphabet, 7);
         /*
         crypto = Vigenere.encrypt(base, "БВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯА", "А", text);
@@ -149,18 +149,54 @@ public class Main {
         }
 
         int[] result = findKeyword(alphabet, pp);
-        for (int i = 0; i < freq.length; ++i) {
-            StringBuilder key = new StringBuilder();
-            float x = 0;
-            for (int j = 0; j < length; ++j) {
-                int charIndex = (freq.length - result[j] + i) % freq.length;
-                key.append(alphabet.getAlphabet().charAt(charIndex));
-                x += freq[charIndex] / length;
-            }
-            //if (x > 0.035) {
-            System.out.println(key.toString() + ": " + x);
-            //}
+        /*String keyw = "подлюем";
+        for (int i = 0; i < crypto.length; ++i) {
+            crypto[i] = (freq.length + crypto[i] + ('а' - keyw.charAt(i % keyw.length()))) % freq.length;
         }
+        result = new int[]{0};
+        length = 1;*/
+        int[][] words = new int[][]{
+                result
+        };
+        for (int[] word : words) {
+            System.out.println("===========");
+            System.out.println(Arrays.toString(word));
+            for (int i = 0; i < freq.length; ++i) {
+                StringBuilder key = new StringBuilder();
+                float x = 0;
+                for (int j = 0; j < word.length; ++j) {
+                    int charIndex = (freq.length - word[j] + i) % freq.length;
+                    key.append(alphabet.getAlphabet().charAt(charIndex));
+                    x += freq[charIndex] / word.length;
+                }
+                //if (x > 0.035) {
+                System.out.println(key.toString() + ": " + x);
+                //}
+            }
+        }
+
+
+        result = Vigenere.strToIdx(Vigenere.createAlphabet(alphabet.getAlphabet()), "РЕДИСКА");
+        for (int i = 0; i < result.length; ++i) {
+            result[i] = result[i] = (freq.length - result[i]) % freq.length;
+        }
+
+        for (int i = 0; i < freq.length; ++i) {
+            double pMax = 0;
+            int found = 0;
+            for (int j = 0; j < freq.length; ++j) {
+                double pShift = 1.0;
+                for (int k = 0; k < result.length; ++k) {
+                    pShift *= p[k][(freq.length + j + result[k]) % freq.length][i];
+                }
+                if (pMax < pShift) {
+                    found = j;
+                    pMax = pShift;
+                }
+            }
+            System.out.println(alphabet.getAlphabet().charAt(i) + " -> " + alphabet.getAlphabet().charAt(found) + ": " + pMax);
+        }
+
 
         List<Integer> remap = new ArrayList<>();
         final int[] counter = new int[freq.length];
