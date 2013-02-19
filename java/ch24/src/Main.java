@@ -185,11 +185,25 @@ public class Main {
             result[i] = (freq.length - keyword[i]) % freq.length;
         }
 
+                        // ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА
+        String solution = "ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА".toUpperCase();
         int abc[] = new int[freq.length];
         for (int i = 0; i < freq.length; ++i) {
             abc[i] = -1;
         }
         for (int i = 0; i < freq.length; ++i) {
+            int idx = solution.indexOf(alphabet.getAlphabet().charAt(i));
+            if (idx >= 0) {
+                abc[idx] = i;
+            }
+        }
+        for (int c = 0; c < freq.length; ++c) {
+            int i = alphabet.getSorted()[c];
+
+            if (solution.indexOf(alphabet.getAlphabet().charAt(i)) >= 0) {
+                continue;
+            }
+
             double pMax = 0;
             int found = 0;
             for (int j = 0; j < freq.length; ++j) {
@@ -209,39 +223,20 @@ public class Main {
             System.out.println(alphabet.getAlphabet().charAt(i) + " -> " + alphabet.getAlphabet().charAt(found) + ": " + pMax);
         }
 
-
-        System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), keyword));
-        System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), abc));
-
-        int[] text = Vigenere.decrypt(abc, keyword, crypto);
-        //int[] text = Vigenere.decrypt(non, result, crypto);
-        String text1 = Vigenere.idxToStr(alphabet.getAlphabet(), text);
-
-        System.out.println(
-                Vigenere.decrypt(alphabet.getAlphabet(),
-                        Vigenere.idxToStr(alphabet.getAlphabet(), abc),
-                        Vigenere.idxToStr(alphabet.getAlphabet(), keyword),
-                        Vigenere.idxToStr(alphabet.getAlphabet(), crypto)
-                )
-        );
-        // ЖНФЖПЕЕЫШВЛПЖАТГФБЦМКЖЬЗАЮЪИВУЩЖРСЮБЬЬКЬЫЕСУУЦТЮБШУНЖЦМЭЭШЮЗУЬЕКНАУЕЫЩШЖРЬЙЛЮПКНДЙЯГЭЪЖЫГЖОУШИШУФГВРШМАГВВУВОСЗХЧИУГНЛАЯЬЬКИЯРЦЖРЫАХЪВИЖГЭЯЦСЪУЫФЯРМЗФЧФЪЩСЬФШВЕОМКТИМБЭВЪКФХЙЦХНЬЮЬМФЛБИМРУЛМЯЗФЧЪЪЧЗНКЗНИВЛНШГЛЩИЛЗНФФУЖКНДЙЯГЭЕУЮЛЛЮЖНЯИЕМДЙШГЯУГВЦФЩВЮМФАГЯВХМЭВВФПГФФЖККГЦМЛЫБШМПУЕШЖЛЯЮЯРЧВЪЖУПВМКЛЫЭСЭЧИРЫГЫЩЗЗЗКЖЛЕШВРЪЧЪААЖЗДХЪФСБРНМЪКЫБЪФУНЦЮБТЖУНЯЕШИМУКФВГВГЧМЭВЗРВМЪЪЕЕТОЯЦБЖГВИЖМДКЗЗПАФЯВНРЫГЮЩЭЯЬЦШЪЧНГВЫАХЪВЛНШАПВЧОЬОЙКЮАШОКЗЛЩУШЯРНЗГХЛТЮЖЫШШГППЬЫШАЬФМАФЕЙЗАЙПЛУЭЖЛЗИЗНЖККРЦЯДЧКНДЙЯГЭБФЬАВБЭКЗФКЫТВЛЕЪЭЯЛЭЩЗНФХГЧКТКЫЮЗЗЪУЖАПВЧОЬОЙКЕСЛЗАЮЪИВУНЫПКЗВЯЪГОСЩЛБЬГМЯВЗГЬКШЪГЙЕНПСМЭВГОГЧСОРГЩОЦМВДГЩКЧЮЗВЗКЦЧЯРЧВЪЖФЫЕЛЖАЪУССХРУОЬЫЕЙГЫОТУЕАГЖГЫСЩИЯРВТЮДЖНЛГЦМЗЬЪЯИЦТРЕМИКЦЩВЦОРЛХМХЖВРЬПУГВЯРЬПМЯЖЖРЧПШЪЧУВГЧСЕЕГЦЬПЗДМОЬОЧЗКВУФЯУПОХЪГЪЭЯЖВЖФ
-        // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
-        text1 = Vigenere.decrypt(alphabet.getAlphabet(),
-              //"ЕХЭАИЯТБОНЪДРГЩЛВУЗШЬЖЮКМПЫФСЙЧЦ",
-              // ++.!+...+...!+++++++++....+.+.+.
-                "ЕХЭАИЯТБОНЪДРГЩКВУЗШЬЖЮЛМПЫФСЙЧЦ",
-//              "ЕХЭАИЯТБОНЪДРГЩКВУЗШЬЖЮЛМПЫФСЙЧЦ",
-                "РЕДИСКА",
+        String text1 = Vigenere.decrypt(alphabet.getAlphabet(),
+                Vigenere.idxToStr(alphabet.getAlphabet(), abc),
+                Vigenere.idxToStr(alphabet.getAlphabet(), keyword),
                 Vigenere.idxToStr(alphabet.getAlphabet(), crypto)
         );
+        findWords(text1);
+        System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), keyword));
+        System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), abc));
         System.out.println(
                 Vigenere.idxToStr(alphabet.getAlphabet(), crypto)
         );
         System.out.println(
                 text1
         );
-
-        findWords(text1);
     }
 
     private static int[] findKeyword(Alphabet alphabet, final double[][][] pp) {
