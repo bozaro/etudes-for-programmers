@@ -10,6 +10,15 @@ import java.util.Map;
  * @author Artem V. Navrotskiy (bozaro at buzzsoft.ru)
  */
 public class Vigenere {
+    /**
+     * Зашифрование текста.
+     *
+     * @param base  Исходный алфавит.
+     * @param crypt Алфавит с перестановкой.
+     * @param key   Ключевое слово.
+     * @param text  Текст.
+     * @return Возвращает шифрованный текст.
+     */
     public static String encrypt(String base, String crypt, String key, String text) {
         Map<Character, Integer> alphabet = checkAlphabet(base, crypt);
         return idxToStr(base, encrypt(
@@ -19,6 +28,15 @@ public class Vigenere {
         ));
     }
 
+    /**
+     * Расшифрование текста.
+     *
+     * @param base  Исходный алфавит.
+     * @param crypt Алфавит с перестановкой.
+     * @param key   Ключевое слово.
+     * @param data  Шифрованный тТекст.
+     * @return Возвращает расшифрованный текст.
+     */
     public static String decrypt(String base, String crypt, String key, String data) {
         Map<Character, Integer> alphabet = checkAlphabet(base, crypt);
         Map<Character, Integer> invert = checkAlphabet(crypt, base);
@@ -47,12 +65,20 @@ public class Vigenere {
         return text;
     }
 
+    public static String normalize(String base, String str) {
+        return idxToStr(base, strToIdx(base, str));
+    }
+
     public static String idxToStr(String base, int[] encrypt) {
         StringBuilder builder = new StringBuilder();
         for (int i : encrypt) {
             builder.append(base.charAt(i));
         }
         return builder.toString();
+    }
+
+    public static int[] strToIdx(String alphabet, String str) {
+        return strToIdx(createAlphabet(alphabet), str);
     }
 
     public static int[] strToIdx(Map<Character, Integer> alphabet, String str) {
