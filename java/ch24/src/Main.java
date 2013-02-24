@@ -1,50 +1,25 @@
 import ch24.decrypt.Alphabet;
+import ch24.decrypt.Decrypter;
 import ch24.decrypt.Vigenere;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Alphabet alphabet = loadAlphabet(Main.class.getResourceAsStream("alphabet.txt"));
+        Alphabet alphabet = Alphabet.load(Main.class.getResourceAsStream("alphabet.txt"));
 
-        float[] freq = alphabet.getFrequency();
-        for (int shift = 0; shift < freq.length; ++shift) {
-            float x = 0;
-            for (int a = 0; a < freq.length; ++a) {
-                int b = (a + freq.length - shift) % freq.length;
-                x += Math.abs(freq[a] - freq[b]) * (freq[a] + freq[b]);
+        try (InputStreamReader reader = new InputStreamReader(Main.class.getResourceAsStream("crypto.txt"), StandardCharsets.UTF_8)) {
+            String cryptoText = loadText(reader);
+            int keywordLength = Decrypter.findKeywordLength(alphabet, cryptoText);
+            if (keywordLength > 0) {
+                getFreqKeyword(alphabet, cryptoText, keywordLength);
             }
-            System.out.println(shift + ": " + x);
         }
-
-        if (true) {
-            float hitMin = getFreq(alphabet.getFrequency());
-            float hitMax = 1.0F / alphabet.getFrequency().length;
-            float hitLine = (hitMax * hitMax + hitMin * hitMin) / 2.0F;
-            boolean[] mark = new boolean[20];
-            try (InputStreamReader reader = new InputStreamReader(Main.class.getResourceAsStream("crypto.txt"), StandardCharsets.UTF_8)) {
-                int[] crypto = loadCrypto(reader, alphabet);
-                for (int i = 1; i < mark.length; ++i) {
-                    if (mark[i]) continue;
-                    float hit = checkKeywordLength(crypto, alphabet, i);
-                    if (hit > hitLine) {
-                        for (int j = 0; j < mark.length; j += i) {
-                            mark[j] = true;
-                        }
-                        System.out.println(i + ": " + hit);
-                        getFreqKeyword(crypto, alphabet, i);
-                    }
-                }
-            }
-            if (true)
-                return;
-        }
+        if (true)
+            return;
 
         String text = "ВАРИАНТ RUNNING KEY (БЕГУЩИЙ КЛЮЧ) ШИФРА ВИЖЕНЕРА КОГДА-ТО БЫЛ НЕВЗЛАМЫВАЕМЫМ. ЭТА ВЕРСИЯ ИСПОЛЬЗУЕТ В КАЧЕСТВЕ КЛЮЧА БЛОК ТЕКСТА, РАВНЫЙ ПО ДЛИНЕ ИСХОДНОМУ ТЕКСТУ. ТАК КАК КЛЮЧ РАВЕН ПО ДЛИНЕ СООБЩЕНИЮ, ТО МЕТОДЫ ПРЕДЛОЖЕННЫЕ ФРИДМАНОМ И КАСИСКИ НЕ РАБОТАЮТ (ТАК КАК КЛЮЧ НЕ ПОВТОРЯЕТСЯ). В 1920 ГОДУ ФРИДМАН ПЕРВЫМ ОБНАРУЖИЛ НЕДОСТАТКИ ЭТОГО ВАРИАНТА. ПРОБЛЕМА С RUNNING KEY ШИФРА ВИЖЕНЕРА СОСТОИТ В ТОМ, ЧТО КРИПТОАНАЛИТИК ИМЕЕТ СТАТИСТИЧЕСКУЮ ИНФОРМАЦИЮ О КЛЮЧЕ (УЧИТЫВАЯ, ЧТО БЛОК ТЕКСТА НАПИСАН НА ИЗВЕСТНОМ ЯЗЫКЕ) И ЭТА ИНФОРМАЦИЯ БУДЕТ ОТРАЖАТЬСЯ В ШИФРОВАННОМ ТЕКСТЕ. ЕСЛИ КЛЮЧ ДЕЙСТВИТЕЛЬНО СЛУЧАЙНЫЙ, ЕГО ДЛИНА РАВНА ДЛИНЕ СООБЩЕНИЯ И ОН ИСПОЛЬЗОВАЛСЯ ЕДИНОЖДЫ, ТО ШИФР ВИЖЕНЕРА ТЕОРЕТИЧЕСКИ БУДЕТ НЕВЗЛАМЫВАЕМЫМ."
                 + "А ВОТ ГДЕ КОРРЕКТНОСТЬ ДЕЙСТВИТЕЛЬНО ВАЖНА, ТАК ЭТО В ПОЛЯХ С АДРЕСОМ ЭЛЕКТРОННОЙ ПОЧТЫ, НОМЕРОМ БАНКОВСКОЙ КАРТЫ, ZIP КОДОМ И Т.Д." +
@@ -63,59 +38,30 @@ public class Main {
         String crypt = "ЗУШВЬЯЖЩКГЛФМДПЪЫНЮОСИЙТЧБАЭХЦЕР";
         //crypt = base;
         String crypto = Vigenere.encrypt(base, crypt, "РЕДИСКА", text);
-        getFreqKeyword(Vigenere.strToIdx(Vigenere.createAlphabet(base), crypto), alphabet, 7);
+        getFreqKeyword(alphabet, crypto, 7);
         /*
         crypto = Vigenere.encrypt(base, "БВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯА", "А", text);
         getFreqKeyword(Vigenere.strToIdx(Vigenere.createAlphabet(base), crypto), alphabet, 1);*/
     }
 
-    private static float getFreq(float[] frequency) {
-        float hit = 0;
-        for (float f : frequency) {
-            hit += f * f;
-        }
-        return hit;
-    }
-
-    private static float getFreq(int[] list) {
-        int count = 0;
-        float result = 0;
-        for (int i : list) {
-            result += i * (i - 1);
-            count += i;
-        }
-        return result / (count * (count - 1));
-    }
-
-    private static void getFreqKeyword(int[] crypto, Alphabet alphabet, int length) {
-        // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
-        // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
-        final float[] freq = alphabet.getFrequency();
-        int[] counts = new int[length];
-        int[][] table = new int[length][];
-        for (int i = 0; i < length; ++i) {
-            table[i] = new int[freq.length];
-        }
-        for (int i = 0; i < crypto.length; ++i) {
-            table[i % length][crypto[i]]++;
-            counts[i % length]++;
-        }
-
-
-        double[][][] p = new double[length][][];
-        for (int k = 0; k < length; ++k) {
-            p[k] = new double[freq.length][];
-            for (int i = 0; i < freq.length; ++i) {
-                p[k][i] = new double[freq.length];
-                for (int j = 0; j < freq.length; ++j) {
-                    double sum = 0;
-                    for (int m = 0; m < freq.length; ++m) {
-                        sum += Math.pow(freq[m], table[k][j]) * Math.pow(1 - freq[m], counts[k] - table[k][j]);
-                    }
-                    p[k][i][j] = Math.pow(freq[i], table[k][j]) * Math.pow((1 - freq[i]), counts[k] - table[k][j]) / sum;
-                }
+    private static String loadText(InputStreamReader reader) throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final char[] buffer = new char[1024];
+        while (true) {
+            int readed = reader.read(buffer);
+            if (readed < 0) {
+                break;
             }
+            text.append(buffer, 0, readed);
         }
+        return text.toString();
+    }
+
+    private static void getFreqKeyword(Alphabet alphabet, String cryptoText, int length) {
+        // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
+        // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
+        double[][][] p = Decrypter.getMatrix(alphabet, cryptoText, length);
+        double[] freq = alphabet.getFrequency();
 
 
         double[][][] px = new double[length][][];
@@ -128,7 +74,7 @@ public class Main {
                     for (int j = 0; j < freq.length; ++j) {
                         double sum = 0;
                         for (int i = 0; i < freq.length; ++i) {
-                            sum += p[k][i][j] * p[l][(i + r) % freq.length][j];
+                            sum += p[k][j][i] * p[l][j][(i + r) % freq.length];
                         }
                         mul *= sum;
                     }
@@ -153,12 +99,6 @@ public class Main {
         }
 
         int[] result = findKeyword(alphabet, pp);
-        /*String keyw = "подлюем";
-        for (int i = 0; i < crypto.length; ++i) {
-            crypto[i] = (freq.length + crypto[i] + ('а' - keyw.charAt(i % keyw.length()))) % freq.length;
-        }
-        result = new int[]{0};
-        length = 1;*/
         int[][] words = new int[][]{
                 result
         };
@@ -185,55 +125,17 @@ public class Main {
             result[i] = (freq.length - keyword[i]) % freq.length;
         }
 
-                        // ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА
-        String solution = "ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА".toUpperCase();
-        int abc[] = new int[freq.length];
-        for (int i = 0; i < freq.length; ++i) {
-            abc[i] = -1;
-        }
-        for (int i = 0; i < freq.length; ++i) {
-            int idx = solution.indexOf(alphabet.getAlphabet().charAt(i));
-            if (idx >= 0) {
-                abc[idx] = i;
-            }
-        }
-        for (int c = 0; c < freq.length; ++c) {
-            int i = alphabet.getSorted()[c];
-
-            if (solution.indexOf(alphabet.getAlphabet().charAt(i)) >= 0) {
-                continue;
-            }
-
-            double pMax = 0;
-            int found = 0;
-            for (int j = 0; j < freq.length; ++j) {
-                double pShift = 1.0;
-                for (int k = 0; k < result.length; ++k) {
-                    pShift *= p[k][(freq.length + j + result[k]) % freq.length][i];
-                }
-                if (abc[j] >= 0) {
-                    continue;
-                }
-                if (pMax < pShift) {
-                    found = j;
-                    pMax = pShift;
-                }
-            }
-            abc[found] = i;
-            System.out.println(alphabet.getAlphabet().charAt(i) + " -> " + alphabet.getAlphabet().charAt(found) + ": " + pMax);
-        }
-
+        // ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА
+        String abc = Decrypter.findAlphabet(alphabet, cryptoText, "РЕДИСКА", "ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА");
         String text1 = Vigenere.decrypt(alphabet.getAlphabet(),
-                Vigenere.idxToStr(alphabet.getAlphabet(), abc),
+                abc,
                 Vigenere.idxToStr(alphabet.getAlphabet(), keyword),
-                Vigenere.idxToStr(alphabet.getAlphabet(), crypto)
+                cryptoText
         );
         findWords(text1);
         System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), keyword));
-        System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), abc));
-        System.out.println(
-                Vigenere.idxToStr(alphabet.getAlphabet(), crypto)
-        );
+        System.out.println(abc);
+        System.out.println(Vigenere.normalize(alphabet.getAlphabet(), cryptoText));
         System.out.println(
                 text1
         );
@@ -241,7 +143,7 @@ public class Main {
 
     private static int[] findKeyword(Alphabet alphabet, final double[][][] pp) {
         boolean[][][] shifts = new boolean[pp.length][][];
-        float[] freq = alphabet.getFrequency();
+        double[] freq = alphabet.getFrequency();
         double alpha = 1.0 / freq.length;
         for (int i = 0; i < pp.length; ++i) {
             shifts[i] = new boolean[pp.length][];
@@ -393,22 +295,22 @@ public class Main {
         return result;
     }
 
-    private static void findWords(String text1) {
-        boolean[] mark = new boolean[text1.length()];
+    private static void findWords(String crypto) {
+        boolean[] mark = new boolean[crypto.length()];
         for (int l = 10; l >= 4; --l) {
-            for (int i = 0; i < text1.length() - l * 2; ++i) {
+            for (int i = 0; i < crypto.length() - l * 2; ++i) {
                 if (mark[i]) continue;
-                for (int j = i + l; j < text1.length() - l; ++j) {
+                for (int j = i + l; j < crypto.length() - l; ++j) {
                     if (mark[j]) continue;
                     boolean ok = true;
                     for (int k = 0; k < l; ++k) {
-                        if (text1.charAt(i + k) != text1.charAt(j + k)) {
+                        if (crypto.charAt(i + k) != crypto.charAt(j + k)) {
                             ok = false;
                             break;
                         }
                     }
                     if (ok) {
-                        System.out.println(text1.substring(i, i + l));
+                        System.out.println(crypto.substring(i, i + l));
                         for (int k = 0; k < l; ++k) {
                             mark[i + k] = true;
                             mark[j + k] = true;
@@ -417,72 +319,5 @@ public class Main {
                 }
             }
         }
-    }
-
-    private static float checkKeywordLength(int[] crypto, Alphabet alphabet, int length) {
-        float result = 0;
-        for (int i = 0; i < length; ++i) {
-            float hit = 0;
-            int count = 0;
-            int[] freqs = new int[alphabet.getFrequency().length];
-            for (int j = i; j < crypto.length; j += length) {
-                freqs[crypto[j]]++;
-                count++;
-            }
-            for (int freq : freqs) {
-                hit += (freq * (freq - 1)) / (float) (count * (count - 1));
-            }
-            //hit -= base;
-            result += hit * hit;
-        }
-        return result / length;
-    }
-
-    public static Alphabet loadAlphabet(InputStream stream) throws IOException {
-        try (InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
-            return loadAlphabet(reader);
-        }
-    }
-
-    public static Alphabet loadAlphabet(Reader reader) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        Pattern pattern = Pattern.compile("^(\\w)\\s+(\\d*\\.?\\d+)\\s*$", Pattern.UNICODE_CHARACTER_CLASS);
-        StringBuilder builder = new StringBuilder();
-        List<Float> frequencyList = new ArrayList<>();
-        float sum = 0.0F;
-        while (true) {
-            String line = bufferedReader.readLine();
-            if (line == null) break;
-            Matcher matcher = pattern.matcher(line);
-            if (matcher.find()) {
-                builder.append(matcher.group(1));
-                float frequency = Float.parseFloat(matcher.group(2));
-                frequencyList.add(frequency);
-                sum += frequency;
-            }
-        }
-        final float[] frequencies = new float[frequencyList.size()];
-        for (int i = 0; i < frequencies.length; ++i) {
-            frequencies[i] = frequencyList.get(i) / sum;
-        }
-        return new Alphabet(frequencies, builder.toString().toUpperCase());
-    }
-
-    public static int[] loadCrypto(Reader reader, Alphabet alphabet) throws IOException {
-        String chars = alphabet.getAlphabet();
-        List<Integer> list = new ArrayList<>();
-        while (true) {
-            int c = reader.read();
-            if (c < 0) break;
-            int index = chars.indexOf((char) c);
-            if (index >= 0) {
-                list.add(index);
-            }
-        }
-        int[] result = new int[list.size()];
-        for (int i = 0; i < result.length; ++i) {
-            result[i] = list.get(i);
-        }
-        return result;
     }
 }
