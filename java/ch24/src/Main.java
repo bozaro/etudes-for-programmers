@@ -1,5 +1,6 @@
 import ch24.decrypt.Alphabet;
 import ch24.decrypt.Decrypter;
+import ch24.decrypt.MathHelper;
 import ch24.decrypt.Vigenere;
 
 import java.io.IOException;
@@ -64,37 +65,22 @@ public class Main {
         double[] freq = alphabet.getFrequency();
 
 
-        double[][][] px = new double[length][][];
+        double[][][] pp = new double[length][][];
         for (int k = 0; k < length; ++k) {
-            px[k] = new double[length][];
+            pp[k] = new double[length][];
             for (int l = 0; l < length; ++l) {
-                px[k][l] = new double[freq.length];
+                double[] x = new double[freq.length];
                 for (int r = 0; r < freq.length; ++r) {
-                    double mul = 1.0F;
+                    x[r] = 1.0F;
                     for (int j = 0; j < freq.length; ++j) {
                         double sum = 0;
                         for (int i = 0; i < freq.length; ++i) {
                             sum += p[k][j][i] * p[l][j][(i + r) % freq.length];
                         }
-                        mul *= sum;
+                        x[r] *= sum;
                     }
-                    px[k][l][r] = mul;
                 }
-            }
-        }
-
-        double[][][] pp = new double[length][][];
-        for (int k = 0; k < length; ++k) {
-            pp[k] = new double[length][];
-            for (int l = 0; l < length; ++l) {
-                pp[k][l] = new double[freq.length];
-                for (int r = 0; r < freq.length; ++r) {
-                    double sum = 0;
-                    for (int s = 0; s < freq.length; ++s) {
-                        sum += px[k][l][s];
-                    }
-                    pp[k][l][r] = px[k][l][r] / sum;
-                }
+                pp[k][l] = MathHelper.normalize(x);
             }
         }
 
