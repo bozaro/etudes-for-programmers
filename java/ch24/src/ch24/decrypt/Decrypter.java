@@ -1,5 +1,8 @@
 package ch24.decrypt;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -120,7 +123,7 @@ public class Decrypter {
      * @param alphabet      Данные алфавита.
      * @param text          Шифрованный текст.
      * @param keywordLength Длина ключевого слова.
-     * @return Массив p[смещение][x][y] с вероятностью соответствия буквы x букве y.
+     * @return Массив p[смещение][y][x] с вероятностью соответствия буквы x букве y.
      */
     public static double[][][] getMatrix(Alphabet alphabet, String text, int keywordLength) {
         final double[][][] p = new double[keywordLength][][];
@@ -148,6 +151,178 @@ public class Decrypter {
             }
         }
         return p;
+    }
+
+    /**
+     * Получение матрицы соответствия сдвигов в ключевом слове.
+     *
+     * @param alphabet      Данные алфавита.
+     * @param text          Шифрованный текст.
+     * @param keywordLength Длина ключевого слова.
+     * @return Массив p[a][b][x] с вероятностью сдвига в позиции ключевого слова a относительно позиции b на x.
+     */
+    public static double[][][] getShiftMatrix(Alphabet alphabet, String text, int keywordLength) {
+        double[][][] p = getMatrix(alphabet, text, keywordLength);
+        int alphabetLength = alphabet.length();
+        double[][][] pp = new double[keywordLength][][];
+        for (int k = 0; k < keywordLength; ++k) {
+            pp[k] = new double[keywordLength][];
+            for (int l = 0; l < keywordLength; ++l) {
+                double[] x = new double[alphabetLength];
+                for (int r = 0; r < alphabetLength; ++r) {
+                    x[r] = 1.0F;
+                    for (int j = 0; j < alphabetLength; ++j) {
+                        double sum = 0;
+                        for (int i = 0; i < alphabetLength; ++i) {
+                            sum += p[k][j][i] * p[l][j][(i + r) % alphabetLength];
+                        }
+                        x[r] *= sum;
+                    }
+                }
+                pp[k][l] = MathHelper.normalize(x);
+            }
+        }
+        return pp;
+    }
+
+    /**
+     * Поиск ключевого слова по словарю.
+     *
+     * @param alphabet      Алфавит.
+     * @param text          Шифрованный текст.
+     * @param keywordLength Длина ключевого слова.
+     * @param stream        Поток для чтения списка слов.
+     * @return Возвращает наиболее вероятное ключевое слово. Или null, если слов данной длины в словаре нет.
+     * @throws IOException
+     */
+    public static String findKeywordDictionary(Alphabet alphabet, String text, int keywordLength, InputStream stream) throws IOException {
+        try (InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+            return findKeywordDictionary(alphabet, text, keywordLength, reader);
+        }
+    }
+
+    /**
+     * Поиск ключевого слова по словарю.
+     *
+     * @param alphabet      Алфавит.
+     * @param text          Шифрованный текст.
+     * @param keywordLength Длина ключевого слова.
+     * @param reader        Поток для чтения списка слов.
+     * @return Возвращает наиболее вероятное ключевое слово. Или null, если слов данной длины в словаре нет.
+     * @throws IOException
+     */
+    public static String findKeywordDictionary(Alphabet alphabet, String text, int keywordLength, Reader reader) throws IOException {
+        double[][][] pp = getShiftMatrix(alphabet, text, keywordLength);
+
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        Map<Character, Integer> charMapping = Vigenere.createAlphabet(alphabet.getAlphabet());
+        double resultRate = 0;
+        String resultWord = null;
+        log.info("Search keyword...");
+        while (true) {
+            String line = bufferedReader.readLine();
+            if (line == null) {
+                break;
+            }
+            String word = line.toUpperCase();
+            int[] wordIdx = Vigenere.strToIdx(charMapping, word);
+            if (wordIdx.length != keywordLength) {
+                continue;
+            }
+            double rate = getKeywordRate(pp, wordIdx);
+            if (resultRate < rate) {
+                resultRate = rate;
+                resultWord = word;
+                log.info(String.format("  %s: %e", word, rate));
+            }
+        }
+        log.info(String.format("Found keyword: %s (rate: %e)", resultWord, resultRate));
+        return resultWord;
+    }
+
+    /**
+     * Поиск ключевого слова математическим методом.
+     *
+     * @param alphabet      Алфавит.
+     * @param text          Шифрованный текст.
+     * @param keywordLength Длина ключевого слова.
+     * @return Возвращает наиболее вероятное ключевое слово.
+     */
+    public static String findKeywordMath(Alphabet alphabet, String text, int keywordLength) {
+        double[][][] pp = getShiftMatrix(alphabet, text, keywordLength);
+
+        double resultRate = 0;
+        int[] checkIdx = new int[keywordLength];
+        int[] resultWord = null;
+        for (int pass = 0; ; ++pass) {
+            int n = pass;
+            for (int i = 0; i < keywordLength; ++i) {
+                checkIdx[i] = -1;
+            }
+            for (int i = 0; i < keywordLength; ++i) {
+                int idx = n % (keywordLength - i);
+                n = n / (keywordLength - i);
+                for (int j = 0; ; ++j) {
+                    if (checkIdx[j] < 0) {
+                        if (idx == 0) {
+                            checkIdx[j] = i;
+                            break;
+                        }
+                        --idx;
+                    }
+                }
+            }
+            if (n > 0) {
+                break;
+            }
+            int[] word = findKeywordMath(pp, checkIdx);
+            double rate = Decrypter.getKeywordRate(pp, word);
+            if (resultRate < rate) {
+                resultRate = rate;
+                resultWord = word;
+            }
+        }
+        return Vigenere.idxToStr(alphabet.getAlphabet(), resultWord);
+    }
+
+    private static int[] findKeywordMath(final double[][][] pp, int[] checkIdx) {
+        int[] result = new int[checkIdx.length];
+        int alphabetLength = pp[0][0].length;
+        for (int l = 1; l < checkIdx.length; ++l) {
+            double resultRate = 0;
+            int resultShift = 0;
+            int pl = checkIdx[l];
+            for (int shift = 0; shift < alphabetLength; ++shift) {
+                double rate = 1.0;
+                for (int i = 0; i < l; ++i) {
+                    int pi = checkIdx[i];
+                    rate *= pp[pi][pl][(alphabetLength + result[pi] - shift) % alphabetLength];
+                }
+                if (resultRate < rate) {
+                    resultRate = rate;
+                    resultShift = shift;
+                }
+            }
+            result[pl] = resultShift;
+        }
+        for (int i = 1; i < result.length; ++i) {
+            result[i] = (alphabetLength + result[i] - result[0]) % alphabetLength;
+        }
+        result[0] = 0;
+        return result;
+    }
+
+    public static double getKeywordRate(double[][][] pp, int[] word) {
+        final int alphabetLength = pp[0][0].length;
+        double rate = 1.0F;
+        for (int i = 0; i < word.length; ++i) {
+            for (int j = 0; j < word.length; ++j) {
+                if (i != j) {
+                    rate *= pp[i][j][(alphabetLength + word[i] - word[j]) % alphabetLength];
+                }
+            }
+        }
+        return rate;
     }
 
     /**
