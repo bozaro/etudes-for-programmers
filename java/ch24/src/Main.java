@@ -1,6 +1,5 @@
 import ch24.decrypt.Alphabet;
 import ch24.decrypt.Decrypter;
-import ch24.decrypt.MathHelper;
 import ch24.decrypt.Vigenere;
 
 import java.io.IOException;
@@ -16,7 +15,17 @@ public class Main {
             String cryptoText = loadText(reader);
             int keywordLength = Decrypter.findKeywordLength(alphabet, cryptoText);
             if (keywordLength > 0) {
-                getFreqKeyword(alphabet, cryptoText, keywordLength);
+                try (InputStreamReader dict = new InputStreamReader(Main.class.getResourceAsStream("dict/ru.txt"), StandardCharsets.UTF_8)) {
+                    String keyword = Decrypter.findKeywordDictionary(alphabet, cryptoText, keywordLength, dict);
+                    String abc = Decrypter.findAlphabet(alphabet, cryptoText, keyword, "");
+                    String text = Vigenere.decrypt(alphabet.getAlphabet(), abc, keyword, cryptoText);
+                    System.out.println(text);
+                }
+
+                String keyword = Decrypter.findKeywordMath(alphabet, cryptoText, keywordLength);
+                String abc = Decrypter.findAlphabet(alphabet, cryptoText, keyword, "");
+                String text = Vigenere.decrypt(alphabet.getAlphabet(), abc, keyword, cryptoText);
+                System.out.println(text);
             }
         }
         if (true)
@@ -61,32 +70,13 @@ public class Main {
     private static void getFreqKeyword(Alphabet alphabet, String cryptoText, int length) {
         // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
         // ЕДЧНИЦАКОМЗИЛГЦИЧЯООЧЕПОЫЕАДАМКНЫТЦЧПРПГРАММНЧХМЗГМЕНООВТОТКАКАЗДЯЙПРОГРИММЕЦЙТЕГМЫНТЕСТЬЛИБОАЛАСНАЗПРТГРАММАЛИБОЯНЕШЕГХПРПУЫМПРИТТЧКАЯСЕСЫЯМЕНТКЫМИНЧЦКАОМПЧЛЯЦИИТВЬЗЭВАЕУУРУЯСДРОГОЫЯВАРЫЗПИАОУНАКОНЕПБЯДАКЕЛЬЕОФКОБКССЕТЕГМЫНТЫНОЮЕЦЕДБЬПОЛНОЙЭАГРПЦКИЕОЫУИБИРОВАЛЧСЬСЫЕТУЕООПКВПРИЗАГРЛЭЕЫМОЛЖНАПРИТЛТСТВОЯИТЬРОВНОПДЕАГЛИВНАГУРОГРАЫМВИБЗАЧКВЖУАЯЯЖВВНАЯЕРОАРАНЫАИМЕНОВАНИИЗАКРЫВАФХЗЕИМЬДОЛЗНОСТСЕАДИТЬМОТАРЧВАЮЩИМТТЧКАКЕЛТПРОГРАМНЦУОДПБЕОБОБДШИНСКВОДРУГИХСГРУУПЧРТСАННЯХИЕСТРЛКУИЙЕТУДОЫЛОТЕГМЫНТВЧМТЖЗТТОУЖРЖАКЬВСЫПТЙОБКЧНОТВПЙМТВЕННТПРОГРАМНАМКОЫЕАДАМЕТИНТААЖЕЧТОЯВРЕЗЫРВИРПВАННЫЕСЛОВАИДЕНТИЬИКАООРЫИКПНМТАНУЧНЫМОЛЖНКРАЯРЯВАТЬСЗНАГРАНИЦАХЗАУИСЕЙТОФАИИХМЛЕДЛЕООТДЕБЬОЬМРУАПОДРПГИЗРОБЕЛИМИЗНААИМИОЕЕРИЦИЙКОММЕНТАРИЫМИИЛИГРАНИЧАМЧЭАПИСЕЙВСЫХАРЧ
-        double[][][] p = Decrypter.getMatrix(alphabet, cryptoText, length);
+        double[][][] pp = Decrypter.getShiftMatrix(alphabet, cryptoText, length);
         double[] freq = alphabet.getFrequency();
 
-
-        double[][][] pp = new double[length][][];
-        for (int k = 0; k < length; ++k) {
-            pp[k] = new double[length][];
-            for (int l = 0; l < length; ++l) {
-                double[] x = new double[freq.length];
-                for (int r = 0; r < freq.length; ++r) {
-                    x[r] = 1.0F;
-                    for (int j = 0; j < freq.length; ++j) {
-                        double sum = 0;
-                        for (int i = 0; i < freq.length; ++i) {
-                            sum += p[k][j][i] * p[l][j][(i + r) % freq.length];
-                        }
-                        x[r] *= sum;
-                    }
-                }
-                pp[k][l] = MathHelper.normalize(x);
-            }
-        }
-
-        int[] result = findKeyword(alphabet, pp);
+        int[] resultWord = Vigenere.strToIdx(alphabet.getAlphabet(), Decrypter.findKeywordMath(alphabet, cryptoText, length));
+        System.out.println();
         int[][] words = new int[][]{
-                result
+                resultWord
         };
         for (int[] word : words) {
             System.out.println("===========");
@@ -107,8 +97,8 @@ public class Main {
 
 
         int[] keyword = Vigenere.strToIdx(Vigenere.createAlphabet(alphabet.getAlphabet()), "РЕДИСКА");
-        for (int i = 0; i < result.length; ++i) {
-            result[i] = (freq.length - keyword[i]) % freq.length;
+        for (int i = 0; i < resultWord.length; ++i) {
+            resultWord[i] = (freq.length - keyword[i]) % freq.length;
         }
 
         // ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА
