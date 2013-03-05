@@ -1,0 +1,27 @@
+apply plugin: "java"
+
+repositories {
+    mavenCentral()	
+}
+
+dependencies {
+	runtime files ("lib/jeuclid-fop-3.1.9.jar")
+	runtime "net.sourceforge.jeuclid:jeuclid-core:3.1.9"
+    runtime "org.apache.xmlgraphics:fop:1.0"
+}
+
+task(runSimple, dependsOn: 'classes', type: JavaExec) {
+    main = "org.apache.fop.cli.Main"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+	    "-c", "config.xml",
+	    "-l", "ru",
+	    "-xml", "book.xml",
+	    "-xsl", "/usr/share/sgml/docbook/stylesheet/xsl/docbook-xsl/fo/docbook.xsl",
+	    "-pdf", "book.pdf",
+    	"-param", "body.font.family", "Serif",
+    	"-param", "title.font.family", "Serif"
+   	]
+}
+
+defaultTasks 'runSimple'
