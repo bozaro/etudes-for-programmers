@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Alphabet alphabet = Alphabet.load(Main.class.getResourceAsStream("alphabet.txt"));
 
-        try (InputStreamReader reader = new InputStreamReader(Main.class.getResourceAsStream("crypto.txt"), StandardCharsets.UTF_8)) {
+        try (InputStreamReader reader = new InputStreamReader(Main.class.getResourceAsStream("crypto_ru.txt"), StandardCharsets.UTF_8)) {
             String cryptoText = loadText(reader);
             int keywordLength = Decrypter.findKeywordLength(alphabet, cryptoText);
             if (keywordLength > 0) {
