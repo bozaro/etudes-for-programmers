@@ -17,6 +17,19 @@
                     <font-triplet name="Serif" style="italic" weight="bold"/>
                 </font>
                 
+                <font kerning="yes" embed-url="fonts/FreeMono.ttf">
+                    <font-triplet name="Mono" style="normal" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="fonts/FreeMonoOblique.ttf">
+                    <font-triplet name="Mono" style="italic" weight="normal"/>
+                </font>
+                <font kerning="yes" embed-url="fonts/FreeMonoBold.ttf">
+                    <font-triplet name="Mono" style="normal" weight="bold"/>
+                </font>
+                <font kerning="yes" embed-url="fonts/FreeMonoBoldOblique.ttf">
+                    <font-triplet name="Mono" style="italic" weight="bold"/>
+                </font>
+                
                 <font kerning="yes"
                  embed-url="fonts/FreeSerif.ttf">
                     <font-triplet name="Times-Roman" style="normal" weight="normal"/>
