@@ -41,7 +41,7 @@ task(book, dependsOn: 'classes', type: JavaExec) {
 		"-l", "ru",
 		"-xml", "book.xml",
 		"-xsl", "/usr/share/sgml/docbook/stylesheet/xsl/docbook-xsl/fo/docbook.xsl",
-		"-pdf", "book.pdf",
+		"-pdf", "build/book.pdf",
 		"-param", "body.font.family", "Serif",
 		"-param", "title.font.family", "Serif",
 		"-param", "monospace.font.family", "Mono",
