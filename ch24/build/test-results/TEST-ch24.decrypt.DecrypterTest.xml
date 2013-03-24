@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="landfill" name="ch24.decrypt.DecrypterTest" tests="4" time="0.385" timestamp="2013-03-24T05:47:33">
+  <properties />
+  <testcase classname="ch24.decrypt.DecrypterTest" name="testKeywordMath" time="0.051" />
+  <testcase classname="ch24.decrypt.DecrypterTest" name="testFindAlphabet" time="0.062" />
+  <testcase classname="ch24.decrypt.DecrypterTest" name="testKeywordLength" time="0.009" />
+  <testcase classname="ch24.decrypt.DecrypterTest" name="testKeywordDictionary" time="0.202" />
+  <system-out><![CDATA[ОАЕТИНСКРВЛЧМДПУЯЫЬГЗБЙХЖШЮЦЩЭФЪ
+ОАЕТИНСКРВЛЧМДПУЯЫЬГЗБЙХЖШЮЦЩЭФЪ
+ОАЕТИНСКРВЛЧМДПУЯЫЬГЗБЙХЖШЮЦЩЭФЪ
+ОАЕТИНСКРВЛЧМДПУЯЫЬГЗБЙХЖШЮЦЩЭФЪ
+]]></system-out>
+  <system-err><![CDATA[мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: О -> Ы: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: А -> Ъ: 0,000007
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Е -> Ю: 0,000011
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Т -> П: 0,000001
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: И -> Х: 0,000002
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Н -> С: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: С -> Ф: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: К -> А: 0,000001
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Р -> Я: 0,000004
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: В -> Г: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Л -> К: 0,000027
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ч -> Ш: 0,000016
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: М -> М: 0,000001
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Д -> Н: 0,000088
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: П -> О: 0,000332
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: У -> Б: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Я -> Е: 0,000139
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ы -> Р: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ь -> Д: 0,000019
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Г -> Й: 0,000012
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: З -> Т: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Б -> Щ: 0,000002
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Й -> Ц: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Х -> Ь: 0,000002
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ж -> Ж: 0,000027
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ш -> В: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ю -> И: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ц -> Э: 0,000001
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Щ -> З: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Э -> У: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ф -> Л: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ъ -> Ч: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: А -> Ъ: 0,000007
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Е -> Ю: 0,000011
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: И -> Х: 0,000002
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Н -> С: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: С -> Ф: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Р -> Я: 0,000004
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: В -> Г: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Л -> К: 0,000027
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ч -> Ш: 0,000016
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: М -> М: 0,000001
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Д -> Н: 0,000088
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: П -> О: 0,000332
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: У -> Б: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Я -> Е: 0,000139
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ы -> Р: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ь -> Д: 0,000019
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Г -> Й: 0,000012
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Б -> Щ: 0,000002
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Й -> Ц: 0,000003
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Х -> Ь: 0,000002
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ж -> Ж: 0,000027
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ш -> В: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ц -> Э: 0,000001
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Щ -> З: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findAlphabet
+INFO: Ф -> Л: 0,000000
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordLength
+INFO: Find keyword length:
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordLength
+INFO:   hit rate for length 1: 0,001272
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordLength
+INFO:   hit rate for length 2: 0,001296
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordLength
+INFO:   hit rate for length 3: 0,001277
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordLength
+INFO:   hit rate for length 4: 0,001312
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordLength
+INFO:   hit rate for length 5: 0,003111
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordLength
+INFO: Found keyword length: 5
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO: Search keyword...
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO:   АБРАМ: 4,245464e-286
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO:   АВДЕЙ: 2,246081e-121
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO:   АВЕЛЬ: 1,207490e-120
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO:   АЛНКА: 3,909976e-91
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO:   АЛИСА: 1,716667e-74
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO:   АЛЫЧА: 3,717224e-70
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO:   АЛЬМА: 2,822986e-51
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO:   АЛЬФА: 2,857307e-07
+мар 24, 2013 9:47:33 AM ch24.decrypt.Decrypter findKeywordDictionary
+INFO: Found keyword: АЛЬФА (rate: 2,857307e-07)
+]]></system-err>
+</testsuite>

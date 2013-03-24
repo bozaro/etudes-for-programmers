@@ -1,7 +1,29 @@
 apply plugin: "java"
 
+project.ext.sourceCompatibility = JavaVersion.VERSION_1_7
+
 repositories {
 	mavenCentral()	
+}
+
+subprojects {
+	group = "ru.bozaro"
+	version = "1.0-SNAPSHOT"
+
+	apply plugin: "java"
+
+	test {
+		ignoreFailures = true
+	}
+
+	repositories {
+		mavenCentral()	
+	}
+
+	dependencies {
+		compile "com.intellij:annotations:9.0.4"
+		testCompile "junit:junit:4.11"
+	}
 }
 
 dependencies {
@@ -11,7 +33,7 @@ dependencies {
 	runtime "org.apache.xmlgraphics:fop:1.0"
 }
 
-task(runSimple, dependsOn: 'classes', type: JavaExec) {
+task(book, dependsOn: 'classes', type: JavaExec) {
 	main = "org.apache.fop.cli.Main"
 	classpath = sourceSets.main.runtimeClasspath
 	args = [
@@ -28,4 +50,4 @@ task(runSimple, dependsOn: 'classes', type: JavaExec) {
 	]
 }
 
-defaultTasks 'runSimple'
+defaultTasks 'book'

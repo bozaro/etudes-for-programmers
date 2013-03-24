@@ -1,0 +1,9 @@
+apply plugin: "java"
+
+description = "Chapter 24. Crypto"
+
+dependencies {
+}
+
+jar {
+}
