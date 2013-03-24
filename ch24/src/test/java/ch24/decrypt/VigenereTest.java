@@ -1,6 +1,6 @@
 package ch24.decrypt;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
