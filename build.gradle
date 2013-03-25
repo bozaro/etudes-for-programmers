@@ -22,6 +22,7 @@ subprojects {
 
 	dependencies {
 		compile "com.intellij:annotations:9.0.4"
+		compile "args4j:args4j:2.0.23"
 		testCompile "junit:junit:4.11"
 	}
 }

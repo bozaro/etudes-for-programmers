@@ -11,6 +11,18 @@ import java.util.Map;
  */
 public class Vigenere {
     /**
+     * Получение базового алфавита из переставленного сортировкой.
+     *
+     * @param crypt Алфавит с перестановкой.
+     * @return Исходный алфавит.
+     */
+    public static String sortAlphabet(String crypt) {
+        final char[] chars = Arrays.copyOf(crypt.toCharArray(), crypt.length());
+        Arrays.sort(chars);
+        return new String(chars);
+    }
+
+    /**
      * Зашифрование текста.
      *
      * @param base  Исходный алфавит.
