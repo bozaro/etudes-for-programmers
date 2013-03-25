@@ -7,3 +7,14 @@ dependencies {
 
 jar {
 }
+
+task(book, dependsOn: 'jar', type: JavaExec) {
+	main = "ch24.CryptoTool"
+	classpath = sourceSets.main.runtimeClasspath
+	args = [
+		"-o", "build/generated",
+		"-i", "decrypted.txt",
+		"-k", "РЕДИСКА",
+		"-a", "ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА",
+	]
+}
