@@ -25,10 +25,10 @@
 
   <figure xml:id="ch24-crypto">
     <title>Таинственная записка, найденная в вычислительном центре. Случайное
-    вкрапление русских слов, например ШИШ или ОЙ, по-видимому, ничего не
-    означает. Но обратите внимание на повторение сочетаний ЗАЮЪИВУ, ЬЬК,
+    вкрапление русских слов, например <xi:include href="build/generated/word-dict-0.txt" parse="text"/> или <xi:include href="build/generated/word-dict-1.txt" parse="text"/>, по-видимому, ничего не
+    означает. Но обратите внимание на повторение сочетаний <xi:include href="build/generated/word-len-0.txt" parse="text"/>, <xi:include href="build/generated/word-len-1.txt" parse="text"/>,
     других коротких сочетаний, а особенно повторяющуюся группу букв
-    КНДЙЯГЭ</title>
+    <xi:include href="build/generated/word-cnt-0.txt" parse="text"/></title>
 
     <titleabbrev>Таинственная записка</titleabbrev>
 

@@ -85,38 +85,14 @@ public class Main {
                 Vigenere.idxToStr(alphabet.getAlphabet(), keyword),
                 cryptoText
         );
-        findWords(text1);
+        for (String word : Vigenere.findWords(text1, 4)) {
+            System.out.println(word);
+        }
         System.out.println(Vigenere.idxToStr(alphabet.getAlphabet(), keyword));
         System.out.println(abc);
         System.out.println(Vigenere.normalize(alphabet.getAlphabet(), cryptoText));
         System.out.println(
                 text1
         );
-    }
-
-    private static void findWords(String crypto) {
-        boolean[] mark = new boolean[crypto.length()];
-        for (int l = 10; l >= 4; --l) {
-            for (int i = 0; i < crypto.length() - l * 2; ++i) {
-                if (mark[i]) continue;
-                for (int j = i + l; j < crypto.length() - l; ++j) {
-                    if (mark[j]) continue;
-                    boolean ok = true;
-                    for (int k = 0; k < l; ++k) {
-                        if (crypto.charAt(i + k) != crypto.charAt(j + k)) {
-                            ok = false;
-                            break;
-                        }
-                    }
-                    if (ok) {
-                        System.out.println(crypto.substring(i, i + l));
-                        for (int k = 0; k < l; ++k) {
-                            mark[i + k] = true;
-                            mark[j + k] = true;
-                        }
-                    }
-                }
-            }
-        }
     }
 }
