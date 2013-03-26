@@ -23,6 +23,31 @@ public class Vigenere {
     }
 
     /**
+     * Форматирование текстового блока.
+     *
+     * @param text  Текст.
+     * @param block Длина блока символов.
+     * @param line  Длина строки.
+     * @return
+     */
+    public static String format(String text, int block, int line) {
+        StringBuilder builder = new StringBuilder();
+        int length = 0;
+        for (int i = 0; i < text.length(); i += block) {
+            if (length + block > line) {
+                length = 0;
+                builder.append('\n');
+            } else if (length > 0) {
+                builder.append(' ');
+            }
+            builder.append(text.substring(i, Math.min(i + block, text.length())));
+            length += block + 1;
+        }
+        builder.append('\n');
+        return builder.toString();
+    }
+
+    /**
      * Зашифрование текста.
      *
      * @param base  Исходный алфавит.

@@ -32,7 +32,7 @@
 
     <titleabbrev>Таинственная записка</titleabbrev>
 
-    <programlisting><xi:include href="generated/crypto.txt" parse="text"/></programlisting>
+    <programlisting><xi:include href="build/generated/encrypted.txt" parse="text"/></programlisting>
   </figure>
 
   <para>Снова возвращаетесь в свой кабинет, пытаясь решить загадку. Бумага

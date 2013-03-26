@@ -8,10 +8,9 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.ExampleMode;
 import org.kohsuke.args4j.Option;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 /**
  * Утилита для генерации примеров в книге.
@@ -19,6 +18,8 @@ import java.nio.charset.StandardCharsets;
  * @author Artem V. Navrotskiy
  */
 public class CryptoTool {
+    private static final Logger log = Logger.getLogger(CryptoTool.class.getName());
+
     public static void main(String[] args) throws IOException {
         Args param = new Args();
         CmdLineParser parser = new CmdLineParser(param);
@@ -32,7 +33,7 @@ public class CryptoTool {
             System.err.println();
             return;
         }
-        System.out.println(param.inFile.getAbsoluteFile());
+        log.info("Input file: " + param.inFile.getAbsoluteFile());
         // Получаем базовый алфавит, если надо.
         if (param.base == null) {
             param.base = Vigenere.sortAlphabet(param.crypt);
@@ -40,7 +41,11 @@ public class CryptoTool {
 
         String text = IOUtils.toString(new FileInputStream(param.inFile), StandardCharsets.UTF_8.name());
         String crypto = Vigenere.encrypt(param.base.toUpperCase(), param.crypt.toUpperCase(), param.keyword.toUpperCase(), text.toUpperCase());
-        System.out.println(crypto);
+
+        log.info("Output directory: " + param.outDir.getAbsolutePath());
+        try (OutputStream stream = new FileOutputStream(new File(param.outDir, "encrypted.txt"))) {
+            stream.write(Vigenere.format(crypto, param.block, param.line).getBytes(StandardCharsets.UTF_8));
+        }
     }
 
     public static class Args {
@@ -60,5 +65,11 @@ public class CryptoTool {
 
         @Option(name = "-a", usage = "key alphabet", required = true)
         private String crypt;
+
+        @Option(name = "--block", usage = "character block size")
+        private int block = 5;
+
+        @Option(name = "--line", usage = "maximum line size")
+        private int line = 70;
     }
 }
