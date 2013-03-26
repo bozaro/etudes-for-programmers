@@ -1,8 +1,6 @@
 package ch24.decrypt;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Шифр Вижнера.
@@ -82,6 +80,34 @@ public class Vigenere {
                 strToIdx(alphabet, key),
                 strToIdx(invert, data)
         ));
+    }
+
+    public static List<String> findWords(String text, int minLength) {
+        final List<String> result = new ArrayList<>();
+        boolean[] mark = new boolean[text.length()];
+        for (int l = 10; l >= minLength; --l) {
+            for (int i = 0; i < text.length() - l * 2; ++i) {
+                if (mark[i]) continue;
+                for (int j = i + l; j < text.length() - l; ++j) {
+                    if (mark[j]) continue;
+                    boolean ok = true;
+                    for (int k = 0; k < l; ++k) {
+                        if (text.charAt(i + k) != text.charAt(j + k)) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                    if (ok) {
+                        result.add(text.substring(i, i + l));
+                        for (int k = 0; k < l; ++k) {
+                            mark[i + k] = true;
+                            mark[j + k] = true;
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     public static int[] encrypt(int[] crypt, int[] key, int[] text) {
