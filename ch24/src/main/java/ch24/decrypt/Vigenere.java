@@ -8,6 +8,9 @@ import java.util.*;
  * @author Artem V. Navrotskiy (bozaro at buzzsoft.ru)
  */
 public class Vigenere {
+    private final static char SPACE = ' ';
+    private final static String SEPARATOR = "  ";
+
     /**
      * Получение базового алфавита из переставленного сортировкой.
      *
@@ -181,5 +184,47 @@ public class Vigenere {
             throw new IllegalArgumentException("Differ alphabet length.");
         }
         return map;
+    }
+
+    public static String formatSpaced(String text, String base, String spaced) {
+        StringBuilder result = new StringBuilder();
+        char lastChar = SPACE;
+        int index = 0;
+        for (char spacedChar : spaced.toCharArray()) {
+            final char insertChar;
+            if (base.contains(String.valueOf(spacedChar))) {
+                insertChar = text.charAt(index);
+                index++;
+                if (index >= text.length()) {
+                    index = 0;
+                }
+            } else {
+                if (lastChar == SPACE) {
+                    continue;
+                }
+                insertChar = SPACE;
+            }
+            lastChar = insertChar;
+            result.append(insertChar);
+        }
+        return result.toString();
+    }
+
+    public static String square(String base, String crypt) {
+        StringBuilder result = new StringBuilder();
+        result
+                .append(SPACE)
+                .append(SEPARATOR)
+                .append(base)
+                .append('\n');
+        for (int i = 0; i < crypt.length(); ++i) {
+            result
+                    .append(base.charAt(i))
+                    .append(SEPARATOR)
+                    .append(crypt.substring(i))
+                    .append(crypt.substring(0, i))
+                    .append('\n');
+        }
+        return result.toString();
     }
 }

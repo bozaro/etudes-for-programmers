@@ -44,24 +44,28 @@ public class CryptoTool {
         }
 
         String text = IOUtils.toString(new FileInputStream(param.inFile), StandardCharsets.UTF_8.name());
-        final String crypto = Vigenere.encrypt(param.base.toUpperCase(), param.crypt.toUpperCase(), param.keyword.toUpperCase(), text.toUpperCase());
+        final String encrypt = Vigenere.encrypt(param.base.toUpperCase(), param.crypt.toUpperCase(), param.keyword.toUpperCase(), text.toUpperCase());
+        final String decrypt = Vigenere.idxToStr(param.base.toUpperCase(), Vigenere.strToIdx(param.base.toUpperCase(), text.toUpperCase()));
 
+        param.outDir.mkdirs();
         log.info("Output directory: " + param.outDir.getAbsolutePath());
-        try (OutputStream stream = new FileOutputStream(new File(param.outDir, "encrypted.txt"))) {
-            stream.write(Vigenere.format(crypto, param.block, param.line).getBytes(StandardCharsets.UTF_8));
-        }
+        writeFile(param.outDir, "alphabet-crypt.txt", param.crypt);
+        writeFile(param.outDir, "keyword.txt", param.keyword);
+        writeFile(param.outDir, "encrypted.txt", Vigenere.format(encrypt, param.block, param.line));
+        writeFile(param.outDir, "space-keyword.txt", Vigenere.formatSpaced(param.keyword, param.base.toUpperCase(), text.toUpperCase()));
+        writeFile(param.outDir, "space-encrypted.txt", Vigenere.formatSpaced(encrypt, param.base.toUpperCase(), text.toUpperCase()));
+        writeFile(param.outDir, "space-decrypted.txt", Vigenere.formatSpaced(decrypt.toUpperCase(), param.base.toUpperCase(), text.toUpperCase()));
+        writeFile(param.outDir, "vigenere.txt", Vigenere.square(param.base.toUpperCase(), param.crypt.toUpperCase()));
         // Слова по длине.
-        List<String> words = Vigenere.findWords(crypto, 4);
+        List<String> words = Vigenere.findWords(encrypt, 4);
         for (int i = 0; i < Math.min(words.size(), param.words); ++i) {
-            try (OutputStream stream = new FileOutputStream(new File(param.outDir, "word-len-" + i + ".txt"))) {
-                stream.write(words.get(i).getBytes(StandardCharsets.UTF_8));
-            }
+            writeFile(param.outDir, "word-len-" + i + ".txt", words.get(i));
         }
         // Слова по частоте.
         Collections.sort(words, new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
-                int cmp = Integer.compare(crypto.replaceAll(s2, "").length() * s1.length(), crypto.replaceAll(s1, "").length() * s2.length());
+                int cmp = Integer.compare(encrypt.replaceAll(s2, "").length() * s1.length(), encrypt.replaceAll(s1, "").length() * s2.length());
                 if (cmp != 0) {
                     return cmp;
                 }
@@ -69,12 +73,10 @@ public class CryptoTool {
             }
         });
         for (int i = 0; i < Math.min(words.size(), param.words); ++i) {
-            try (OutputStream stream = new FileOutputStream(new File(param.outDir, "word-cnt-" + i + ".txt"))) {
-                stream.write(words.get(i).getBytes(StandardCharsets.UTF_8));
-            }
+            writeFile(param.outDir, "word-cnt-" + i + ".txt", words.get(i));
         }
         // Слова случайные.
-        List<String> dictWords = findDictWords(crypto, 2);
+        List<String> dictWords = findDictWords(encrypt, 2);
         Collections.sort(dictWords, new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
@@ -82,9 +84,13 @@ public class CryptoTool {
             }
         });
         for (int i = 0; i < Math.min(dictWords.size(), param.words); ++i) {
-            try (OutputStream stream = new FileOutputStream(new File(param.outDir, "word-dict-" + i + ".txt"))) {
-                stream.write(dictWords.get(i).getBytes(StandardCharsets.UTF_8));
-            }
+            writeFile(param.outDir, "word-dict-" + i + ".txt", dictWords.get(i));
+        }
+    }
+
+    private static void writeFile(File basePath, String fileName, String content) throws IOException {
+        try (OutputStream stream = new FileOutputStream(new File(basePath, fileName))) {
+            stream.write(content.getBytes(StandardCharsets.UTF_8));
         }
     }
 
