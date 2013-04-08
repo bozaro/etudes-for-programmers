@@ -35,14 +35,27 @@ dependencies {
 	runtime "org.apache.xmlgraphics:fop:1.0"
 }
 
-task(book, dependsOn: ['classes', 'ch24:book'], type: JavaExec) {
+task(docbookXsl, type: Copy) {
+	ext {
+		output = file ("${project.buildDir}/docbook-xsl")
+	}
+	from (tarTree("lib/docbook-xsl-1.78.1.tar.bz2")) {
+		eachFile { details -> details.path =
+			details.path.substring(details.relativePath.segments[0].length())
+		} 
+	} 
+	into "$output"
+}
+
+task(book, dependsOn: ['classes', 'docbookXsl', 'ch24:book'], type: JavaExec) {
 	main = "org.apache.fop.cli.Main"
 	classpath = sourceSets.main.runtimeClasspath
 	args = [
+		"-d",
 		"-c", "config.xml",
 		"-l", "ru",
 		"-xml", "book.xml",
-		"-xsl", "/usr/share/sgml/docbook/stylesheet/xsl/docbook-xsl/fo/docbook.xsl",
+		"-xsl", "${docbookXsl.output}/fo/docbook.xsl",
 		"-pdf", "build/book.pdf",
 		"-param", "body.font.family", "Serif",
 		"-param", "title.font.family", "Serif",
