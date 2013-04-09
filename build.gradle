@@ -49,7 +49,7 @@ task(docbookXsl, type: Copy) {
 
 task(book, dependsOn: ['classes', 'docbookXsl', 'ch24:book'], type: JavaExec) {
 	main = "org.apache.fop.cli.Main"
-	classpath = sourceSets.main.runtimeClasspath
+	classpath = sourceSets.main.runtimeClasspath + files("${docbookXsl.output}/extensions/xalan27.jar")
 	args = [
 		"-d",
 		"-c", "config.xml",
