@@ -41,5 +41,13 @@ task(bookEx2, dependsOn: 'jar', type: JavaExec) {
 	]
 }
 
-task(book, dependsOn: ['bookText', 'bookEx1', 'bookEx2']) {
+task(bookDict, dependsOn: 'jar', type: JavaExec) {
+	main = "ch24.DictTool"
+	classpath = sourceSets.main.runtimeClasspath
+	args = [
+		"-o", "build/generated/dict"
+	]
+}
+
+task(book, dependsOn: ['bookText', 'bookEx1', 'bookEx2', 'bookDict']) {
 }
