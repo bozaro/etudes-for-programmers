@@ -57,6 +57,7 @@ task(book, dependsOn: ['classes', 'docbookXsl', 'ch24:book'], type: JavaExec) {
 		"-xml", "book.xml",
 		"-xsl", "${docbookXsl.output}/fo/docbook.xsl",
 		"-pdf", "build/book.pdf",
+		"-param", "paper.type", "A4",
 		"-param", "body.font.family", "Serif",
 		"-param", "title.font.family", "Serif",
 		"-param", "monospace.font.family", "Mono",

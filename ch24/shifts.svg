@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="72"
+   height="72"
+   id="svg2985"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="shifts.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
+     id="namedview34"
+     showgrid="false"
+     inkscape:zoom="3.2777778"
+     inkscape:cx="36"
+     inkscape:cy="36"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2985" />
+  <metadata
+     id="metadata3010">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4" />
+     <style type="text/css">
+<![CDATA[
+path {
+	fill:none;
+	stroke:#000000;
+	stroke-width:1px;
+	stroke-linecap:butt;
+	stroke-linejoin:miter;
+	stroke-opacity:1
+}
+text {
+	font-size:7.5;
+	font-style:normal;
+	font-weight:normal;
+	fill:#000000;
+	fill-opacity:1;
+	stroke:none;
+	font-family:Sans;
+	text-anchor:middle;
+	text-align:center
+}
+    ]]>
+     </style>
+  <g>
+    <path
+       d="M 1,11 l 60,0 l 0,60 l -10,0 l 0,-10 l -10,0 l 0,-10 l -10,0 l 0,-10 l -10,0 l 0,-10 l -10,0 l 0,-10 l -10,0 z" />
+    <path
+       d="M 11,21 l 50,0" />
+    <path
+       d="M 21,31 l 40,0" />
+    <path
+       d="M 31,41 l 30,0" />
+    <path
+       d="M 41,51 l 20,0" />
+    <path
+       d="M 51,61 l 10,0" />
+    <path
+       d="M 11,11 l 0,10" />
+    <path
+       d="M 21,11 l 0,20" />
+    <path
+       d="M 31,11 l 0,30" />
+    <path
+       d="M 41,11 l 0,40" />
+    <path
+       d="M 51,11 l 0,50" />
+  </g>
+  <text x="6" y="9">2</text>
+  <text x="16" y="9">3</text>
+  <text x="26" y="9">4</text>
+  <text x="36" y="9">5</text>
+  <text x="46" y="9">6</text>
+  <text x="56" y="9">7</text>
+
+  <text x="66" y="19">1</text>
+  <text x="66" y="29">2</text>
+  <text x="66" y="39">3</text>
+  <text x="66" y="49">4</text>
+  <text x="66" y="59">5</text>
+  <text x="66" y="69">6</text>
+
+  <text x="6" y="19">1</text>
+  <text x="16" y="19">2</text>
+  <text x="26" y="19">2</text>
+  <text x="36" y="19">2</text>
+  <text x="46" y="19">3</text>
+  <text x="56" y="19">2</text>
+
+  <text x="16" y="29">1</text>
+  <text x="26" y="29">2</text>
+  <text x="36" y="29">6</text>
+  <text x="46" y="29">6</text>
+  <text x="56" y="29">5</text>
+
+  <text x="26" y="39">3</text>
+  <text x="36" y="39">21</text>
+  <text x="46" y="39">2</text>
+  <text x="56" y="39">2</text>
+
+  <text x="36" y="49">4</text>
+  <text x="46" y="49">13</text>
+  <text x="56" y="49">1</text>
+
+  <text x="46" y="59">5</text>
+  <text x="56" y="59">2</text>
+
+  <text x="56" y="69">1</text>
+</svg>
