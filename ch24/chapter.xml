@@ -7,7 +7,7 @@
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook"
          xmlns:m="http://www.w3.org/1998/Math/MathML">
-  <title>Секрет фирмы</title>
+  <title>т фирмы</title>
 
   <subtitle>или математический подход к раскрытию шифров</subtitle>
 
@@ -1104,6 +1104,311 @@
 
                 <m:mi>k,l,s</m:mi>
               </m:msub>
+            </m:mrow>
+          </m:mfrac>
+        </m:mrow>
+      </m:math>
+    </equation>
+
+    <para>Фактический сдвиг <symbol>r(k, l)</symbol> между k-й и l-й группами
+    должен иметь достаточно большую вероятность
+    <symbol>p<subscript>k,l,r</subscript></symbol>. Но на сколько большую? В
+    следующей таблице приведены данные о расшифровке оригинала примера.</para>
+
+    <figure xml:id="ch24-matrix">
+      <title>Таблица сдвигов</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="left" fileref="shifts.svg" width="5cm"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>В клетке с координатами <symbol>k</symbol>, <symbol>l</symbol>
+    указано, какое место в порядке убывания
+    <symbol>p<subscript>k,l,r</subscript></symbol> для фиксированных
+    <symbol>k</symbol>, <symbol>l</symbol> занимает фактический сдвиг
+    <symbol>r(k, l)</symbol>. Видно, что за двумя исключениями номер места не
+    превышает шести. Таким образом, величины сдвигов <symbol>r(k, l)</symbol>
+    следует искать среди тех, которые дают 6—7 наибольших значений
+    <symbol>p<subscript>k,l,r</subscript></symbol> для данных
+    <symbol>k</symbol>, <symbol>l</symbol>. Для выбора из них фактических
+    величин сдвигов стоит воспользоваться фактической согласованностью
+    сдвигов</para>
+
+    <equation>
+      <m:math display="inline">
+        <m:mrow>
+          <m:mrow>
+            <m:mrow>
+              <m:mi>r</m:mi>
+
+              <m:mo>⁡</m:mo>
+
+              <m:mfenced>
+                <m:mi>k</m:mi>
+
+                <m:mi>l</m:mi>
+              </m:mfenced>
+            </m:mrow>
+
+            <m:mo>⊕</m:mo>
+
+            <m:mrow>
+              <m:mi>r</m:mi>
+
+              <m:mo>⁡</m:mo>
+
+              <m:mfenced>
+                <m:mi>l</m:mi>
+
+                <m:mi>m</m:mi>
+              </m:mfenced>
+            </m:mrow>
+          </m:mrow>
+
+          <m:mo>=</m:mo>
+
+          <m:mrow>
+            <m:mi>r</m:mi>
+
+            <m:mo>⁡</m:mo>
+
+            <m:mfenced>
+              <m:mi>k</m:mi>
+
+              <m:mi>m</m:mi>
+            </m:mfenced>
+          </m:mrow>
+        </m:mrow>
+      </m:math>
+    </equation>
+
+    <para>Складывая всех кандидатов для <symbol>r(1, 2)</symbol> с
+    <symbol>r(2, 3)</symbol> и проверяя, находится ли результат среди
+    кандидатов для <symbol>r(1, 3)</symbol>, можно отбросить большую часть
+    вариантов. Затем следует аналогично определить <symbol>r(1, 4)</symbol>,
+    учитывая <symbol>r(2, 4)</symbol> и <symbol>r(3, 4)</symbol>, и т. д. Этот
+    перебор легко провести и вручную, если число кандидатов для каждого
+    <symbol>r(k, l)</symbol> не более 8. Поскольку возможны исключительные
+    случаи (<symbol>r(3, 5)</symbol> и <symbol>r(4, 5)</symbol> в <xref
+    linkend="ch24-matrix"/>), то в результате этого процесса сдвиг для
+    какой-либо группы может оказаться определенным не правильно либо процесс
+    может вообще не сойтись (будут отброшены все варианты). В таком случае
+    следует заново определить величину сдвига для наихудшей группы
+    (определяемой, например по наибольшему среднему месту сдвигов относительно
+    этой группы), учитывая большее число кандидатов.</para>
+
+    <para>После определения сдвигов следует найти ключевое слово, как описано
+    в основном тексте, рассматривая все слова вида
+    <symbol>x<subscript>a</subscript>,x<subscript>a⊖r(1,2)</subscript>,x<subscript>a⊖r(1,3)</subscript>,…
+    (a = 1,…,n)</symbol>. Возможно, для получения осмысленного слова придется
+    изменить одну из букв. Определив ключевое слово, находим окончательные
+    величины сдвигов.</para>
+
+    <para>Теперь для определения перестановки вычислим вероятности
+    <symbol>p(x<subscript>i</subscript>|y<subscript>j</subscript>)</symbol>
+    того, что буква <symbol>y<subscript>j</subscript></symbol> в зашифрованном
+    тексте соответствует букве <symbol>x<subscript>i</subscript></symbol> в
+    первой группе, <symbol>x<subscript>i⊖r(1,2)</subscript></symbol> — во
+    второй и т.д.:</para>
+
+    <equation>
+      <m:math display="block">
+        <m:mrow>
+          <m:mrow>
+            <m:mover>
+              <m:mi>p</m:mi>
+
+              <m:mo>~</m:mo>
+            </m:mover>
+
+            <m:mo>⁡</m:mo>
+
+            <m:mfenced>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>x</m:mi>
+
+                  <m:mi>i</m:mi>
+                </m:msub>
+
+                <m:mo>|</m:mo>
+
+                <m:msub>
+                  <m:mi>y</m:mi>
+
+                  <m:mi>j</m:mi>
+                </m:msub>
+              </m:mrow>
+            </m:mfenced>
+          </m:mrow>
+
+          <m:mo>=</m:mo>
+
+          <m:mrow>
+            <m:munderover>
+              <m:mo>∏</m:mo>
+
+              <m:mrow>
+                <m:mi>k</m:mi>
+
+                <m:mo>=</m:mo>
+
+                <m:mi>1</m:mi>
+              </m:mrow>
+
+              <m:mi>d</m:mi>
+            </m:munderover>
+
+            <m:mrow>
+              <m:msub>
+                <m:mi>p</m:mi>
+
+                <m:mi>k</m:mi>
+              </m:msub>
+
+              <m:mo>⁡</m:mo>
+
+              <m:mfenced>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>y</m:mi>
+
+                    <m:mi>j</m:mi>
+                  </m:msub>
+
+                  <m:mo>|</m:mo>
+
+                  <m:msub>
+                    <m:mi>x</m:mi>
+
+                    <m:mrow>
+                      <m:mi>x</m:mi>
+
+                      <m:mo>⊕</m:mo>
+
+                      <m:mrow>
+                        <m:mi>r</m:mi>
+
+                        <m:mo>⁡</m:mo>
+
+                        <m:mfenced>
+                          <m:mi>l</m:mi>
+
+                          <m:mi>k</m:mi>
+                        </m:mfenced>
+                      </m:mrow>
+                    </m:mrow>
+                  </m:msub>
+                </m:mrow>
+              </m:mfenced>
+            </m:mrow>
+          </m:mrow>
+        </m:mrow>
+      </m:math>
+    </equation>
+
+    <para>(<symbol>r(1, 1)</symbol> полагаем равным нулю, <symbol>d</symbol> —
+    число групп)</para>
+
+    <equation>
+      <m:math display="block">
+        <m:mrow>
+          <m:mrow>
+            <m:mi>p</m:mi>
+
+            <m:mfenced>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>x</m:mi>
+
+                  <m:mi>i</m:mi>
+                </m:msub>
+
+                <m:mo>|</m:mo>
+
+                <m:msub>
+                  <m:mi>y</m:mi>
+
+                  <m:mi>j</m:mi>
+                </m:msub>
+              </m:mrow>
+            </m:mfenced>
+          </m:mrow>
+
+          <m:mo>=</m:mo>
+
+          <m:mfrac>
+            <m:mrow>
+              <m:mover>
+                <m:mi>p</m:mi>
+
+                <m:mo>~</m:mo>
+              </m:mover>
+
+              <m:mfenced>
+                <m:mrow>
+                  <m:msub>
+                    <m:mi>x</m:mi>
+
+                    <m:mi>i</m:mi>
+                  </m:msub>
+
+                  <m:mo>|</m:mo>
+
+                  <m:msub>
+                    <m:mi>y</m:mi>
+
+                    <m:mi>j</m:mi>
+                  </m:msub>
+                </m:mrow>
+              </m:mfenced>
+            </m:mrow>
+
+            <m:mrow>
+              <m:munderover>
+                <m:mo>∑</m:mo>
+
+                <m:mrow>
+                  <m:mi>m</m:mi>
+
+                  <m:mo>=</m:mo>
+
+                  <m:mi>1</m:mi>
+                </m:mrow>
+
+                <m:mrow>
+                  <m:mi>n</m:mi>
+                </m:mrow>
+              </m:munderover>
+
+              <m:mrow>
+                <m:mover>
+                  <m:mi>p</m:mi>
+
+                  <m:mo>~</m:mo>
+                </m:mover>
+
+                <m:mfenced>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>x</m:mi>
+
+                      <m:mi>m</m:mi>
+                    </m:msub>
+
+                    <m:mo>|</m:mo>
+
+                    <m:msub>
+                      <m:mi>y</m:mi>
+
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                </m:mfenced>
+              </m:mrow>
             </m:mrow>
           </m:mfrac>
         </m:mrow>
