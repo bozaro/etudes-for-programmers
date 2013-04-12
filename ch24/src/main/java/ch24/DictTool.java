@@ -53,12 +53,24 @@ public class DictTool {
 
             StringBuilder table = new StringBuilder();
             table.append("<tbody xmlns=\"http://docbook.org/ns/docbook\">\n");
-            for (int idx : alphabet.getSorted()) {
-                table.append("<row><entry>")
-                        .append(alphabet.getAlphabet().charAt(idx))
-                        .append("</entry><entry>")
-                        .append(format.format(alphabet.getFrequency()[idx]))
-                        .append("</entry></row>\n");
+            int size = alphabet.getSorted().length;
+            int totalRows = (size + param.rows - 1) / param.rows;
+            for (int i = 0; i < totalRows; ++i) {
+                table.append("<row>\n");
+                for (int j = 0; j < param.rows; ++j) {
+                    int cell = j * totalRows + i;
+                    if (cell < size) {
+                        int idx = alphabet.getSorted()[cell];
+                        table.append("  <entry>")
+                                .append(alphabet.getAlphabet().charAt(idx))
+                                .append("</entry><entry>")
+                                .append(format.format(alphabet.getFrequency()[idx]))
+                                .append("</entry>\n");
+                    } else {
+                        table.append("  <entry /><entry />\n");
+                    }
+                }
+                table.append("</row>\n");
             }
             table.append("</tbody>\n");
             writeFile(param.outDir, "table.xml", table.toString());
@@ -75,6 +87,9 @@ public class DictTool {
         @Option(name = "-o", usage = "output to this directory", metaVar = "OUTPUT")
         @NotNull
         private File outDir = new File("build/generated-test");
+
+        @Option(name = "--rows", usage = "rows count")
+        private int rows = 1;
 
         @Option(name = "--delta", usage = "freq delta")
         private double delta = 0.01;
