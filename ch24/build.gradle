@@ -1,0 +1,53 @@
+apply plugin: "java"
+
+description = "Chapter 24. Crypto"
+
+dependencies {
+}
+
+jar {
+}
+
+task(bookText, dependsOn: 'jar', type: JavaExec) {
+	main = "ch24.CryptoTool"
+	classpath = sourceSets.main.runtimeClasspath
+	args = [
+		"-o", "build/generated/text",
+		"-i", "decrypted.txt",
+		"-k", "РЕДИСКА",
+		"-a", "ЕХЭЦРБТИОНЪДФГЩЯВУЗШЬЖКЛМПЫЮСЙЧА",
+	]
+}
+
+task(bookEx1, dependsOn: 'jar', type: JavaExec) {
+	main = "ch24.CryptoTool"
+	classpath = sourceSets.main.runtimeClasspath
+	args = [
+		"-o", "build/generated/example1",
+		"-i", "example.txt",
+		"-k", "А",
+		"-a", "ЗУШВЬЯЖЩКГЛФМДПЪЫНЮОСИЙТЧБАЭХЦЕР",
+	]
+}
+
+task(bookEx2, dependsOn: 'jar', type: JavaExec) {
+	main = "ch24.CryptoTool"
+	classpath = sourceSets.main.runtimeClasspath
+	args = [
+		"-o", "build/generated/example2",
+		"-i", "example.txt",
+		"-k", "ЛИСП",
+		"-a", "ЗУШВЬЯЖЩКГЛФМДПЪЫНЮОСИЙТЧБАЭХЦЕР",
+	]
+}
+
+task(bookDict, dependsOn: 'jar', type: JavaExec) {
+	main = "ch24.DictTool"
+	classpath = sourceSets.main.runtimeClasspath
+	args = [
+		"-o", "build/generated/dict"
+	]
+}
+
+task(book, dependsOn: ['bookText', 'bookEx1', 'bookEx2', 'bookDict']) {
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="commons-io-1.3.1" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-awt-util-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="xalan-2.6.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="jeuclid-core-3.1.9" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-transcoder-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="avalon-framework-api-4.3.1" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-bridge-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-svg-dom-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-extension-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-util-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="commons-logging-1.1.1" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="xmlgraphics-commons-1.4" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="jeuclid-fop-3.1.9" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-svggen-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="xml-apis-ext-1.3.04" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="avalon-framework-impl-4.3.1" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-parser-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-gvt-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="fop-1.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-anim-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-script-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-dom-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-js-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="fop-hyph-1.2" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-css-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-ext-1.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="batik-xml-1.7" level="project" />
+  </component>
+</module>
+

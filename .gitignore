@@ -4,3 +4,14 @@
 *.jar
 *.war
 *.ear
+
+# Idea
+.idea/misc.xml
+.idea/workspace.xml
+
+# Gradle
+.gradle
+build/
+
+# Some backups
+*~

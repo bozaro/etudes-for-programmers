@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jeuclid-fop-3.1.9">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jeuclid-fop-3.1.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
