@@ -49,6 +49,7 @@ public class CryptoTool {
 
         param.outDir.mkdirs();
         log.info("Output directory: " + param.outDir.getAbsolutePath());
+        writeFile(param.outDir, "alphabet-base.txt", param.base);
         writeFile(param.outDir, "alphabet-crypt.txt", param.crypt);
         writeFile(param.outDir, "keyword.txt", param.keyword);
         writeFile(param.outDir, "encrypted.txt", Vigenere.format(encrypt, param.block, param.line));

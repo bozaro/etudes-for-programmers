@@ -45,7 +45,8 @@ task(bookDict, dependsOn: 'jar', type: JavaExec) {
 	main = "ch24.DictTool"
 	classpath = sourceSets.main.runtimeClasspath
 	args = [
-		"-o", "build/generated/dict"
+		"-o", "build/generated/dict",
+		"--rows", 3,
 	]
 }
 

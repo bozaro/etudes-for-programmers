@@ -7,7 +7,7 @@
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook"
          xmlns:m="http://www.w3.org/1998/Math/MathML">
-  <title>т фирмы</title>
+  <title>Секрет фирмы</title>
 
   <subtitle>или математический подход к раскрытию шифров</subtitle>
 
@@ -171,9 +171,17 @@
     <table xml:id="ch24-chars">
       <title>Таблица частот букв русского алфавита</title>
 
-      <tgroup cols="2">
+      <tgroup cols="6">
         <thead>
           <row>
+            <entry>Буква</entry>
+
+            <entry>Частота</entry>
+
+            <entry>Буква</entry>
+
+            <entry>Частота</entry>
+
             <entry>Буква</entry>
 
             <entry>Частота</entry>
@@ -579,7 +587,11 @@
         <m:mrow>
           <m:mrow>
             <m:msub>
-              <m:mi>p</m:mi>
+              <m:mover>
+                <m:mi>p</m:mi>
+
+                <m:mo>~</m:mo>
+              </m:mover>
 
               <m:mi>k</m:mi>
             </m:msub>
@@ -753,7 +765,11 @@
               <m:mspace depth="0.5ex" height="0.5ex" width="1ex"/>
 
               <m:msub>
-                <m:mi>p</m:mi>
+                <m:mover>
+                  <m:mi>p</m:mi>
+
+                  <m:mo>~</m:mo>
+                </m:mover>
 
                 <m:mi>k</m:mi>
               </m:msub>
@@ -810,7 +826,11 @@
                 <m:mspace depth="0.5ex" height="0.5ex" width="1ex"/>
 
                 <m:msub>
-                  <m:mi>p</m:mi>
+                  <m:mover>
+                    <m:mi>p</m:mi>
+
+                    <m:mo>~</m:mo>
+                  </m:mover>
 
                   <m:mi>k</m:mi>
                 </m:msub>
@@ -841,7 +861,11 @@
           <m:mfrac>
             <m:mrow>
               <m:msub>
-                <m:mi>p</m:mi>
+                <m:mover>
+                  <m:mi>p</m:mi>
+
+                  <m:mo>~</m:mo>
+                </m:mover>
 
                 <m:mi>k</m:mi>
               </m:msub>
@@ -882,7 +906,11 @@
 
               <m:mrow>
                 <m:msub>
-                  <m:mi>p</m:mi>
+                  <m:mover>
+                    <m:mi>p</m:mi>
+
+                    <m:mo>~</m:mo>
+                  </m:mover>
 
                   <m:mi>k</m:mi>
                 </m:msub>
@@ -1414,5 +1442,175 @@
         </m:mrow>
       </m:math>
     </equation>
+
+    <para>Фактические значения <symbol>x<subscript>i</subscript></symbol>
+    должны давать большие значения
+    <symbol>p(x<subscript>i</subscript>|y<subscript>j</subscript>)</symbol>.
+    Числа
+    <symbol>p(x<subscript>i</subscript>|y<subscript>j</subscript>)</symbol>
+    дают для определения перестановки существенно более четкую информацию, чем
+    числа <symbol>p<subscript>k,l,r</subscript></symbol> для определения
+    сдвигов. Оказывается, что при длинне тескта около 700 букв для большинства
+    <symbol>y<subscript>j</subscript></symbol> зашифрованного текста
+    соответствующее им <symbol>x<subscript>i</subscript></symbol> дает
+    максимальное значение
+    <symbol>p(x<subscript>i</subscript>|y<subscript>j</subscript>)</symbol>.
+    Перестановка легко уточняется, если начать расшифровку, учитывая
+    осмысленность получаемого текста.</para>
+
+    <para>При реализации этого алгоритма на ЭВМ следует иметь ввиду, что числа
+    <inlineequation>
+        <m:math display="inline">
+          <m:mrow>
+            <m:mover>
+              <m:mi>p</m:mi>
+
+              <m:mo>~</m:mo>
+            </m:mover>
+
+            <m:mo>⁡</m:mo>
+
+            <m:mfenced>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>x</m:mi>
+
+                  <m:mi>i</m:mi>
+                </m:msub>
+
+                <m:mo>|</m:mo>
+
+                <m:msub>
+                  <m:mi>y</m:mi>
+
+                  <m:mi>j</m:mi>
+                </m:msub>
+              </m:mrow>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </inlineequation> могут оказаться весьма малыми. Так, при расшифровке
+    оригинала примера они лежали в диапазоне от
+    10<superscript>-51</superscript> до 10<superscript>-36</superscript>. Если
+    на вашей ЭВМ такие числа не представимы, то вычислите логарифмы
+    <inlineequation>
+        <m:math display="inline">
+          <m:mrow>
+            <m:mi>log</m:mi>
+
+            <m:mo>⁡</m:mo>
+
+            <m:mfenced>
+              <m:mrow>
+                <m:mover>
+                  <m:mi>p</m:mi>
+
+                  <m:mo>~</m:mo>
+                </m:mover>
+
+                <m:mo>⁡</m:mo>
+
+                <m:mfenced>
+                  <m:mrow>
+                    <m:msub>
+                      <m:mi>x</m:mi>
+
+                      <m:mi>i</m:mi>
+                    </m:msub>
+
+                    <m:mo>|</m:mo>
+
+                    <m:msub>
+                      <m:mi>y</m:mi>
+
+                      <m:mi>j</m:mi>
+                    </m:msub>
+                  </m:mrow>
+                </m:mfenced>
+              </m:mrow>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </inlineequation>. Числа <inlineequation>
+        <m:math display="inline">
+          <m:msub>
+            <m:mi>p</m:mi>
+
+            <m:mi>k,l,r</m:mi>
+          </m:msub>
+        </m:math>
+      </inlineequation> и <inlineequation>
+        <m:math display="inline">
+          <m:mrow>
+            <m:mi>p</m:mi>
+
+            <m:mo>⁡</m:mo>
+
+            <m:mfenced>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>x</m:mi>
+
+                  <m:mi>i</m:mi>
+                </m:msub>
+
+                <m:mo>|</m:mo>
+
+                <m:msub>
+                  <m:mi>y</m:mi>
+
+                  <m:mi>j</m:mi>
+                </m:msub>
+              </m:mrow>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </inlineequation> можно вообще не вычислять, воспользовавшись вместо них
+    <inlineequation>
+        <m:math display="inline">
+          <m:msub>
+            <m:mover>
+              <m:mi>p</m:mi>
+
+              <m:mo>~</m:mo>
+            </m:mover>
+
+            <m:mi>k,l,r</m:mi>
+          </m:msub>
+        </m:math>
+      </inlineequation> и <inlineequation>
+        <m:math display="inline">
+          <m:mrow>
+            <m:mover>
+              <m:mi>p</m:mi>
+
+              <m:mo>~</m:mo>
+            </m:mover>
+
+            <m:mo>⁡</m:mo>
+
+            <m:mfenced>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>x</m:mi>
+
+                  <m:mi>i</m:mi>
+                </m:msub>
+
+                <m:mo>|</m:mo>
+
+                <m:msub>
+                  <m:mi>y</m:mi>
+
+                  <m:mi>j</m:mi>
+                </m:msub>
+              </m:mrow>
+            </m:mfenced>
+          </m:mrow>
+        </m:math>
+      </inlineequation>, отличающиеся постоянным множителем.</para>
+
+    <para>Это способ позволил расшифровать английский оригинал примера.
+    Удастся ли вам проделать то же самое с русским текстом?</para>
   </simplesect>
 </chapter>
